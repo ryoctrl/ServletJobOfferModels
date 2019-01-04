@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class CompanyManager {
 	public final static String STORAGE_KEY = "STORAGE_TYPE";
-	private ArrayList<Company> companies;
 	private AbstractCompanyStore cs;
 	private AbstractPathStore ps;
 	
@@ -17,32 +16,34 @@ public class CompanyManager {
 	}
 	
 	private CompanyManager() {
-		
 		initialize();
 	}
 	
+	
+	//WARNING: CompanyStore is depenpdencies to PathStore. So should instantiate PathStore before instantiate CompanyStore
 	private void initialize() {
-		String storageEnv = System.getenv(STORAGE_KEY);
-		if(storageEnv == null || (!storageEnv.equals("json") && !storageEnv.equals("sql"))) storageEnv = "json";
-		
-		if(storageEnv.equals("json")) {
-			cs = new JsonCompanyStore();
-			ps = new JsonPathStore();
-		} else {
-			cs = new SQLCompanyStore();
-			ps = new SQLPathStore();
-		}
-		
-		companies = cs.findAll();
+		ps = AbstractPathStore.getInstance();
+		cs = AbstractCompanyStore.getInstance();
 	}
 	
-	public void registerNewCompany(String name, String location, String type, ArrayList<Path> paths) {
-		cs.insert(new Company(name, location, type, paths));
+	public Company registerNewCompany(String name, String location, String type) {
+		Company newCompany = new Company(name, location, type);
+		cs.insert(newCompany);
+		return newCompany;
 	}
 	
-	public void registerNewPath(String path, int companyId) {
+	public Path registerNewPath(String path, int companyId) {
 		Path newPath = new Path(path,companyId);
 		ps.insert(newPath);
-		cs.findOne(companyId).addPath(newPath);;
+		cs.findOneById(companyId).addPath(newPath);
+		return newPath;
+	}
+	
+	public Company findOneByCompanyId(int companyId) {
+		return cs.findOneById(companyId);
+	}
+	
+	public ArrayList<Company> getAllCompanies() {
+		return cs.getAll();
 	}
 }

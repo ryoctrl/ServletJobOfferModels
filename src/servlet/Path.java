@@ -1,12 +1,11 @@
 package servlet;
 
-public class Path {
-    private int id;
+public class Path extends Storable{
     private String path;
     private int companyId;
 
     public Path(int id, String path, int companyId) {
-        this.id = id;
+        super.setId(id);
         this.path = path;
         this.companyId = companyId;
     }
@@ -14,14 +13,6 @@ public class Path {
     public Path(String path, int companyId) {
     	this.path = path;
     	this.companyId = companyId;
-    }
-
-    public int getId() {
-        return this.id;
-    }
-    
-    public void setId(int id) {
-    	this.id = id;
     }
 
     public String getPath() {

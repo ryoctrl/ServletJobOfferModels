@@ -4,20 +4,17 @@ import java.util.ArrayList;
 
 public class SQLPathStore extends AbstractPathStore{
 
-	@Override
-	public void insert(Path obj) {
-		// TODO 自動生成されたメソッド・スタブ
+	protected SQLPathStore() {
 		
 	}
-
 	@Override
-	public Path findOne(int id) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public void insert(Path obj) {
+		super.insert(obj);
+		// TODO: SAVE TO SQL DB
 	}
 
 	@Override
-	public ArrayList<Path> findAll() {
+	public ArrayList<Path> getAll() {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
@@ -26,6 +23,18 @@ public class SQLPathStore extends AbstractPathStore{
 	protected int getMaxId() {
 		// TODO 自動生成されたメソッド・スタブ
 		return 0;
+	}
+
+
+	@Override
+	public Path findOneById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public ArrayList<Path> findAllByCompanyId(int id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

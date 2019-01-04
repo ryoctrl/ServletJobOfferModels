@@ -2,15 +2,14 @@ package servlet;
 
 import java.util.ArrayList;
 
-public class Company {
-    private int id;
+public class Company extends Storable{
     private String name;
     private String location;
     private String type;
     private ArrayList<Path> paths;
 
     public Company(int id, String name, String location, String type, ArrayList<Path> paths) {
-        this.id = id;
+    	setId(id);
         this.name = name;
         this.location = location;
         this.type = type;
@@ -18,22 +17,11 @@ public class Company {
         else this.paths = paths;
     }
     
-    public Company(String name, String location, String type, ArrayList<Path> paths) {
-    	//this.id = id;
+    public Company(String name, String location, String type) {
     	this.name = name;
     	this.location = location;
     	this.type = type;
-    	if(paths == null) paths = new ArrayList<Path>();
-    	else this.paths = paths;
-    }
-   
-
-    public int getId() {
-        return this.id;
-    }
-    
-    public void setId(int id) {
-    	this.id = id;
+    	this.paths = new ArrayList<Path>();
     }
 
     public String getName() {

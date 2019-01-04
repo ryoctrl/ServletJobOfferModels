@@ -1,31 +1,67 @@
 package servlet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class JsonPathStore extends AbstractPathStore{
+	public static final String jsonFileName = "paths.json";
+	private String jsonStr = "";
+	
+	protected JsonPathStore() {
+		super();
+		jsonStr = Utilities.readJsonFromFile(jsonFileName);
+		
+		JSONArray jsonArray = new JSONArray(jsonStr);
+		for(Object o : jsonArray) {
+			if( o instanceof JSONObject) {
+				JSONObject obj = (JSONObject) o;
+				int id = obj.getInt("id");
+				String path = obj.getString("path");
+				int companyId = obj.getInt("companyId");
+				Path p = new Path(id, path, companyId);
+				records.add(p);
+			}
+		}
+	}
+	
+	private void saveToJson() {
+		ArrayList<HashMap> jsonList = new ArrayList<>();
+		for(Path p : records) {
+			HashMap<String, Object> map = new HashMap<>();
+			map.put("id", p.getId());
+			map.put("path", p.getPath());
+			map.put("companyId", p.getCompanyId());
+			jsonList.add(map);
+		}
+		JSONArray arr = new JSONArray(jsonList);
+		Utilities.writeJsonToFile(jsonFileName, arr.toString());
+	}
 
 	@Override
 	public void insert(Path obj) {
 		super.insert(obj);
-		
+		records.add(obj);
+		saveToJson();
 	}
 
 	@Override
-	public Path findOne(int id) {
-		// TODO 自動生成されたメソッド・スタブ
+	public Path findOneById(int id) {
+		for(Path record : records) {
+			if(id == record.getId()) return record;
+		}
 		return null;
 	}
 
 	@Override
-	public ArrayList<Path> findAll() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-	@Override
-	protected int getMaxId() {
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
+	public ArrayList<Path> findAllByCompanyId(int id) {
+		ArrayList<Path> paths = new ArrayList<>();
+		for(Path record : records) {
+			if(record.getCompanyId() == id) paths.add(record);
+		}
+		return paths;
 	}
 
 }
