@@ -1,10 +1,13 @@
-package servlet;
+package store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import company.Path;
+import company.Utilities;
 
 public class JsonPathStore extends AbstractPathStore{
 	public static final String jsonFileName = "paths.json";

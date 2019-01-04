@@ -1,6 +1,8 @@
-package servlet;
+package company;
 
 import java.util.ArrayList;
+
+import store.Storable;
 
 public class Company extends Storable{
     private String name;

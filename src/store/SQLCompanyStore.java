@@ -1,6 +1,8 @@
-package servlet;
+package store;
 
 import java.util.ArrayList;
+
+import company.Company;
 
 public class SQLCompanyStore extends AbstractCompanyStore{
 

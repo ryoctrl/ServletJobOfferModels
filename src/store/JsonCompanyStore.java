@@ -1,9 +1,14 @@
-package servlet;
+package store;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONObject;
+
+import company.Company;
+import company.Path;
+import company.Utilities;
+
 import org.json.JSONArray;
 
 public class JsonCompanyStore extends AbstractCompanyStore{

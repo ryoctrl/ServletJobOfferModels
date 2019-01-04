@@ -1,4 +1,6 @@
-package servlet;
+package company;
+
+import store.Storable;
 
 public class Path extends Storable{
     private String path;

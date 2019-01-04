@@ -1,6 +1,9 @@
-package servlet;
+package store;
 
 import java.util.ArrayList;
+
+import company.Company;
+import company.CompanyManager;
 
 public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	private static AbstractCompanyStore instance = null;

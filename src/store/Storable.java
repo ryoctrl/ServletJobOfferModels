@@ -1,4 +1,4 @@
-package servlet;
+package store;
 
 public class Storable {
 	private int id;

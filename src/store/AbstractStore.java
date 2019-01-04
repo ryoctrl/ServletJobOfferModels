@@ -1,6 +1,9 @@
-package servlet;
+package store;
 
 import java.util.ArrayList;
+
+import company.Company;
+import company.IStore;
 
 public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	protected ArrayList<T> records;

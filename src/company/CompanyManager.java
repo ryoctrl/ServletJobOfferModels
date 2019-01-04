@@ -1,6 +1,9 @@
-package servlet;
+package company;
 
 import java.util.ArrayList;
+
+import store.AbstractCompanyStore;
+import store.AbstractPathStore;
 
 public class CompanyManager {
 	public final static String STORAGE_KEY = "STORAGE_TYPE";

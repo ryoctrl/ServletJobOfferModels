@@ -1,6 +1,10 @@
-package servlet;
+package test;
 
 import java.util.ArrayList;
+
+import company.Company;
+import company.CompanyManager;
+import company.Path;
 
 public class Test {
 	public static void main(String[] args) {
