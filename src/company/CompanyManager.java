@@ -23,7 +23,7 @@ public class CompanyManager {
 	}
 	
 	
-	//WARNING: CompanyStore is depenpdencies to PathStore. So should instantiate PathStore before instantiate CompanyStore
+	//WARNING: CompanyStore is dependence to PathStore. So should instantiate PathStore before instantiate CompanyStore
 	private void initialize() {
 		ps = AbstractPathStore.getInstance();
 		cs = AbstractCompanyStore.getInstance();
