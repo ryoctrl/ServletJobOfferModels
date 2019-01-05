@@ -10,7 +10,7 @@ public class CompanyManager {
 	private AbstractCompanyStore cs;
 	private AbstractPathStore ps;
 	
-	public static CompanyManager instance = null;
+	private static CompanyManager instance = null;
 	public static CompanyManager getInstance() {
 		if(instance == null) {
 			instance = new CompanyManager();

@@ -15,7 +15,7 @@ public class Company extends Storable{
         this.name = name;
         this.location = location;
         this.type = type;
-        if(paths == null) paths = new ArrayList<Path>();
+        if(paths == null) this.paths = new ArrayList<Path>();
         else this.paths = paths;
     }
     
