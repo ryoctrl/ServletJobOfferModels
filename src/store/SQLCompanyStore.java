@@ -1,6 +1,7 @@
 package store;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.sql.*;
 
 import company.Company;
@@ -110,7 +111,7 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 	public ArrayList<Company> findAllByLocation(String location) {
 		ArrayList<Company> companies = new ArrayList<>();
 		for(Company record : records) {
-			if(record.getName().equals(location)) companies.add(record);
+			if(record.getLocation().equals(location)) companies.add(record);
 		}
 		return companies;
 	}
@@ -119,7 +120,25 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 	public ArrayList<Company> findAllByType(String type) {
 		ArrayList<Company> companies = new ArrayList<>();
 		for(Company record : records) {
-			if(record.getName().equals(type)) companies.add(record);
+			if(record.getType().equals(type)) companies.add(record);
+		}
+		return companies;
+	}
+	
+	@Override
+	public ArrayList<Company> findAllByLocations(String[] locations) {
+		ArrayList<Company> companies = new ArrayList<>();
+		for(Company record : records) {
+			if(Arrays.asList(locations).contains(record.getLocation())) companies.add(record);
+		}
+		return companies;
+	}
+
+	@Override
+	public ArrayList<Company> findAllByTypes(String[] types) {
+		ArrayList<Company> companies = new ArrayList<>();
+		for(Company record : records) {
+			if(Arrays.asList(types).contains(record.getType())) companies.add(record);
 		}
 		return companies;
 	}

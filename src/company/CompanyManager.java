@@ -1,6 +1,7 @@
 package company;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import store.AbstractCompanyStore;
 import store.AbstractPathStore;
@@ -54,9 +55,15 @@ public class CompanyManager {
 		return cs.findAllByType(type);
 	}
 	
-	
-	
 	public ArrayList<Company> getAllCompanies() {
 		return cs.getAll();
+	}
+	
+	public ArrayList<Company> findAllByLocations(String[] locations) {
+		return cs.findAllByLocations(locations);
+	}
+
+	public ArrayList<Company> findAllByTypes(String[] types) {
+		return cs.findAllByTypes(types);
 	}
 }

@@ -29,5 +29,7 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	public abstract Company findOneById(int id);
 	public abstract Company findOneByName(String name);
 	public abstract ArrayList<Company> findAllByLocation(String location);
+	public abstract ArrayList<Company> findAllByLocations(String[] locations);
 	public abstract ArrayList<Company> findAllByType(String type);
+	public abstract ArrayList<Company> findAllByTypes(String[] types);
 }
