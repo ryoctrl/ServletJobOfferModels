@@ -24,6 +24,7 @@ public class Utilities {
 			map.put("name", c.getName());
 			map.put("location", c.getLocation());
 			map.put("type", c.getType());
+			map.put("description", c.getDescription());
 			jsonList.add(map);
 		}
 		JSONArray arr = new JSONArray(jsonList);

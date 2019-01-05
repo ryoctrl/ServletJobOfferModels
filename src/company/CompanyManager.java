@@ -30,8 +30,8 @@ public class CompanyManager {
 		cs = AbstractCompanyStore.getInstance();
 	}
 	
-	public Company registerNewCompany(String name, String location, String type) {
-		Company newCompany = new Company(name, location, type);
+	public Company registerNewCompany(String name, String location, String type, String description) {
+		Company newCompany = new Company(name, location, type, description);
 		cs.insert(newCompany);
 		return newCompany;
 	}

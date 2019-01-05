@@ -29,8 +29,9 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 				String name = obj.getString("name");
 				String location = obj.getString("location");
 				String type = obj.getString("type");
+				String description = obj.getString("description");
 				ArrayList<Path> paths = ps.findAllByCompanyId(id);
-				Company c = new Company(id, name, location, type, paths);
+				Company c = new Company(id, name, location, type, description, paths);
 				records.add(c);
 			}
 		}
@@ -44,6 +45,7 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 			map.put("name", c.getName());
 			map.put("location", c.getLocation());
 			map.put("type", c.getType());
+			map.put("description", c.getDescription());
 			jsonList.add(map);
 		}
 		JSONArray arr = new JSONArray(jsonList);
@@ -77,7 +79,7 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 	public ArrayList<Company> findAllByLocation(String location) {
 		ArrayList<Company> companies = new ArrayList<>();
 		for(Company record : records) {
-			if(record.getName().equals(location)) companies.add(record);
+			if(record.getLocation().equals(location)) companies.add(record);
 		}
 		return companies;
 	}
@@ -86,7 +88,7 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 	public ArrayList<Company> findAllByType(String type) {
 		ArrayList<Company> companies = new ArrayList<>();
 		for(Company record : records) {
-			if(record.getName().equals(type)) companies.add(record);
+			if(record.getType().equals(type)) companies.add(record);
 		}
 		return companies;
 	}

@@ -24,7 +24,8 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 						"`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
 						"name TEXT NOT NULL, " + 
 						"location TEXT NOT NULL," +
-						"type TEXT NOT NULL" +
+						"type TEXT NOT NULL," +
+						"description TEXT" +
 						");";
 				stmt.executeUpdate(sqlStr);
 				stmt.close();
@@ -40,8 +41,9 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 				String name = companiesRs.getString("name");
 				String location = companiesRs.getString("location");
 				String type = companiesRs.getString("type");
+				String description = companiesRs.getString("description");
 				ArrayList<Path> paths = ps.findAllByCompanyId(id);
-				Company c = new Company(id, name, location, type, paths);
+				Company c = new Company(id, name, location, type, description, paths);
 				records.add(c);
 			}
 		}catch(Exception e) {
@@ -54,10 +56,11 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 		if(conn == null) return;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO companies (name, location, type) VALUES (?, ?, ?)");
+			PreparedStatement ps = conn.prepareStatement("INSERT INTO companies (name, location, type, description) VALUES (?, ?, ?, ?)");
 			ps.setString(1, obj.getName());
 			ps.setString(2, obj.getLocation());
 			ps.setString(3, obj.getType());
+			ps.setString(4, obj.getDescription());
 			int count = ps.executeUpdate();
 			ps.close();
 			if(count < 1) {
