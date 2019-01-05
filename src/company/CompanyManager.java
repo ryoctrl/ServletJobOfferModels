@@ -46,6 +46,16 @@ public class CompanyManager {
 		return cs.findOneById(companyId);
 	}
 	
+	public ArrayList<Company> findAllByLocation(String location) {
+		return cs.findAllByLocation(location);
+	}
+	
+	public ArrayList<Company> findAllByType(String type) {
+		return cs.findAllByType(type);
+	}
+	
+	
+	
 	public ArrayList<Company> getAllCompanies() {
 		return cs.getAll();
 	}
