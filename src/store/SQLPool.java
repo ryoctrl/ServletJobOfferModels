@@ -20,6 +20,11 @@ public class SQLPool {
 		String user = System.getenv("DB_USER");
 		String pass = System.getenv("DB_PASS");
 		
+		if(host == null || dbName == null || user == null || pass == null) {
+			System.err.println("DB_HOST, DB_NAME. DB_USER, DB_PASS ENV IS NOT SETTED!");
+			System.exit(1);
+		}
+		
 		String url = "jdbc:mysql://";
 		url += host;
 		url += "/";
