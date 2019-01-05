@@ -18,14 +18,21 @@ public class Test {
 			}
 		}
 		
-		Company yahoo = cm.registerNewCompany("Yahoo", "TOKYO", "WebVenture");
-		cm.registerNewPath("/path/to/YahooIntern", yahoo.getId());
-		for(Company c : companies) {
-			System.out.println("Company : " + c.getId() +"," + c.getName() + "," + c.getLocation() + "," + c.getType());
-			ArrayList<Path> paths = c.getPaths();
-			for(Path p : paths) {
-				System.out.println("    Path : " + p.getId() + "," + p.getCompanyId() + "," + p.getPath());
-			}
-		}
+//		Company yahoo = cm.registerNewCompany("Yahoo", "TOKYO", "WebVenture");
+//		cm.registerNewPath("/path/to/YahooIntern", yahoo.getId());
+//		for(Company c : companies) {
+//			System.out.println("Company : " + c.getId() +"," + c.getName() + "," + c.getLocation() + "," + c.getType());
+//			ArrayList<Path> paths = c.getPaths();
+//			for(Path p : paths) {
+//				System.out.println("    Path : " + p.getId() + "," + p.getCompanyId() + "," + p.getPath());
+//			}
+//		}
+		
+		
+		Company tgl = cm.findOneByCompanyId(1);
+		System.out.println(tgl.getPaths().size());
+		
+		cm.registerNewPath("Test","Testファイル", 1);
+		System.out.println(tgl.getPaths().size());
 	}
 }

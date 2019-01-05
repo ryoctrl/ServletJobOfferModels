@@ -23,8 +23,9 @@ public class JsonPathStore extends AbstractPathStore{
 				JSONObject obj = (JSONObject) o;
 				int id = obj.getInt("id");
 				String path = obj.getString("path");
+				String name = obj.getString("name");
 				int companyId = obj.getInt("companyId");
-				Path p = new Path(id, path, companyId);
+				Path p = new Path(id, path, name, companyId);
 				records.add(p);
 			}
 		}
@@ -36,6 +37,7 @@ public class JsonPathStore extends AbstractPathStore{
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("id", p.getId());
 			map.put("path", p.getPath());
+			map.put("name", p.getName());
 			map.put("companyId", p.getCompanyId());
 			jsonList.add(map);
 		}

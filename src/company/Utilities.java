@@ -37,6 +37,7 @@ public class Utilities {
 			HashMap<String, Object> map = new HashMap<>();
 			map.put("id", p.getId());
 			map.put("path", p.getPath());
+			map.put("name", p.getName());
 			map.put("companyId", p.getCompanyId());
 			jsonList.add(map);
 		}

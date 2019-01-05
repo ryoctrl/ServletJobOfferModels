@@ -35,8 +35,8 @@ public class CompanyManager {
 		return newCompany;
 	}
 	
-	public Path registerNewPath(String path, int companyId) {
-		Path newPath = new Path(path,companyId);
+	public Path registerNewPath(String path, String name, int companyId) {
+		Path newPath = new Path(path,name, companyId);
 		ps.insert(newPath);
 		cs.findOneById(companyId).addPath(newPath);
 		return newPath;
