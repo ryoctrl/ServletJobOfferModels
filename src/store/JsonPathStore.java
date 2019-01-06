@@ -1,8 +1,8 @@
 package store;
 
 import model.models.Path;
-import storesystem.AbstractStoreSystem;
-import storesystem.JsonStore;
+import store.system.AbstractStoreSystem;
+import store.system.JsonStore;
 
 public class JsonPathStore extends AbstractPathStore{	
 	

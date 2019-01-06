@@ -2,8 +2,8 @@ package store;
 
 import model.models.Company;
 import model.models.Storable;
-import storesystem.AbstractStoreSystem;
-import storesystem.SQLStore;
+import store.system.AbstractStoreSystem;
+import store.system.SQLStore;
 
 public class SQLCompanyStore extends AbstractCompanyStore{
 	

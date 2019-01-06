@@ -6,7 +6,7 @@ import model.IModelDefine;
 import model.Models;
 import model.models.Company;
 import model.models.Storable;
-import storesystem.AbstractStoreSystem;
+import store.system.AbstractStoreSystem;
 
 public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	protected ArrayList<T> records;

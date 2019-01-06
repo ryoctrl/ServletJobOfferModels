@@ -2,7 +2,7 @@ package store;
 
 import model.models.Path;
 import model.models.Storable;
-import storesystem.SQLStore;
+import store.system.SQLStore;
 
 public class SQLPathStore extends AbstractPathStore{
 	

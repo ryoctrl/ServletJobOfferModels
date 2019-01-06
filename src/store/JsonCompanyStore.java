@@ -1,8 +1,8 @@
 package store;
 
 import model.models.Company;
-import storesystem.AbstractStoreSystem;
-import storesystem.JsonStore;
+import store.system.AbstractStoreSystem;
+import store.system.JsonStore;
 
 public class JsonCompanyStore extends AbstractCompanyStore{
 	protected JsonCompanyStore() {

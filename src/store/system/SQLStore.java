@@ -1,4 +1,4 @@
-package storesystem;
+package store.system;
 
 import java.beans.PropertyDescriptor;
 import java.sql.Connection;
