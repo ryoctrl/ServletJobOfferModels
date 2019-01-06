@@ -3,6 +3,7 @@ package storesystem;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 
 import company.Company;
 import company.Utilities;
+import model.ModelOption;
 import model.Models;
 import store.AbstractStore;
 import store.Storable;
@@ -30,9 +32,11 @@ public class JsonStore<T extends Storable> extends AbstractStoreSystem<T> {
 	public void saveToJson(ArrayList<T> records) {
 		ArrayList<HashMap> jsonList = new ArrayList<>();
 		Set<String> keys = Models.getModel(modelName).getModelKeys();
+		LinkedHashMap<String, ModelOption> columns = Models.getModel(modelName).getModelDefine();
 		for(T c : records) {
 			HashMap<String, Object> map = new HashMap<>();
-			keys.forEach(key -> {
+			columns.forEach((key, option) -> {
+				if(option.getType().equals("External")) return;
 				try {
 					map.put(key, new PropertyDescriptor(key, c.getClass()).getReadMethod().invoke(c));
 				}catch(Exception e) {
@@ -54,11 +58,13 @@ public class JsonStore<T extends Storable> extends AbstractStoreSystem<T> {
 		try {
 			JSONArray jsonArray = new JSONArray(Utilities.readJsonFromFileByModelName(modelName));
 			Set<String> keys = Models.getModel(modelName).getModelKeys();
+			LinkedHashMap<String, ModelOption> columns = Models.getModel(modelName).getModelDefine();
 			for(Object o : jsonArray) {
 				if( o instanceof JSONObject) {
 					T modelObj = modelClass.newInstance();
 					JSONObject obj = (JSONObject) o;
-					keys.forEach(key -> {
+					columns.forEach((key, option) -> {
+						if(option.getType().equals("External")) return;
 						try {
 							new PropertyDescriptor(key, modelObj.getClass()).getWriteMethod().invoke(modelObj, obj.get(key));
 						}catch(Exception e) {

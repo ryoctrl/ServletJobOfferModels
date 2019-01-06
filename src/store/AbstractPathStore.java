@@ -9,7 +9,7 @@ public abstract class AbstractPathStore extends AbstractStore<Path> {
 	private static AbstractPathStore instance = null;
 	public static AbstractPathStore getInstance() {
 		if(instance == null) {
-			String storageEnv = System.getenv(Constants.Environments.STORAGE_KEY);
+			String storageEnv = Constants.Environments.STORAGE_TYPE;
 			if(storageEnv == null || (!storageEnv.equals("json") && !storageEnv.equals("sql"))) storageEnv = "json";
 			
 			if(storageEnv.equals("json")) {

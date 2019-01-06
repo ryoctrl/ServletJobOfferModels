@@ -11,7 +11,7 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	private static AbstractCompanyStore instance = null;
 	public static AbstractCompanyStore getInstance() {
 		if(instance == null) {
-			String storageEnv = System.getenv(Constants.Environments.STORAGE_KEY);
+			String storageEnv = Constants.Environments.STORAGE_TYPE;
 			if(storageEnv == null || (!storageEnv.equals("json") && !storageEnv.equals("sql"))) storageEnv = "json";
 			
 			if(storageEnv.equals("json")) {

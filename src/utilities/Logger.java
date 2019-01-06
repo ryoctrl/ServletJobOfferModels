@@ -10,6 +10,8 @@ public class Logger {
 	}
 	
 	public static void fatal(String message) {
-		
+		Date now = new Date();
+		message = now.toString() + " " + message;
+		System.err.println(message);
 	}
 }

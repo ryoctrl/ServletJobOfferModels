@@ -20,7 +20,8 @@ public class SQLUtilities {
 		query += " (";
 		LinkedHashMap<String, ModelOption> columns = def.getModelDefine();
 		StringBuilder sb = new StringBuilder(query);
-		columns.forEach((key, value) -> {
+		columns.forEach((key, option) -> {
+			if(option.getType().equals("External")) return;
 			sb.append(key + ", ");
 		});
 		sb.setLength(sb.length() - 2);

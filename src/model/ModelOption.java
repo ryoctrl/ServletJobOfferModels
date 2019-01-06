@@ -1,10 +1,14 @@
 package model;
 
+import store.Storable;
+
 public class ModelOption {
 	private String type;
 	private boolean nullable;
 	private boolean isId;
 	private int columnIndex;
+	private Class<? extends Storable> externalModel;
+	
 	public ModelOption(String type, boolean nullable, int columnIndex) {
 		this.type = type;
 		this.nullable = nullable;
@@ -26,6 +30,11 @@ public class ModelOption {
 		this.columnIndex = 0;
 	}
 	
+	public ModelOption(Class<? extends Storable> externalModel) {
+		this.type = "External";
+		this.externalModel = externalModel;
+	}
+	
 	public String getType() {
 		return this.type;
 	}
@@ -40,5 +49,9 @@ public class ModelOption {
 	
 	public int getColumnIndex() {
 		return columnIndex;
+	}
+	
+	public Class<? extends Storable> getExternalModel() {
+		return externalModel;
 	}
 }

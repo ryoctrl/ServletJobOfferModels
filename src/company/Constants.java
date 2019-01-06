@@ -7,10 +7,12 @@ public final class Constants {
 	private Constants() {
 	}
 	public static class Environments {
-		public static final String STORAGE_KEY = "STORAGE_TYPE";
+		public static final String STORAGE_TYPE = System.getenv("STORAGE_TYPE");
+		public static final String JSON_DIR = System.getenv("JSON_DIR");
+		public static final String DB_NAME = System.getenv("DB_NAME");
+		public static final String DB_HOST = System.getenv("DB_HOST");
+		public static final String DB_USER = System.getenv("DB_USER");
+		public static final String DB_PASS = System.getenv("DB_PASS");
+		
 	}
-	
-	//TODO: 各種モデルの属性とその型を設定値的に操作できるよう実装する.
-	// => モデルの属性追加や削除, 変更等を行いたいとき現状Jsonの読み書き, SQLの読み書き(テーブルの作成), Utilitiesの読み書きと3か所変更しなければならずバグの原因となる
-	// => モデルの属性MapにkeyとValueのTypeを用意するとやりやすそう
 }

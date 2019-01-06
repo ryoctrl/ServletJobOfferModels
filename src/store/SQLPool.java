@@ -2,6 +2,9 @@ package store;
 
 import java.sql.*;
 
+import company.Constants;
+import utilities.Logger;
+
 public class SQLPool {
 	private Connection conn = null;
 	
@@ -15,13 +18,13 @@ public class SQLPool {
 	
 	private SQLPool() {
 
-		String host = System.getenv("DB_HOST");
-		String dbName = System.getenv("DB_NAME");
-		String user = System.getenv("DB_USER");
-		String pass = System.getenv("DB_PASS");
+		String host = Constants.Environments.DB_HOST;
+		String dbName = Constants.Environments.DB_NAME;
+		String user = Constants.Environments.DB_USER;
+		String pass = Constants.Environments.DB_PASS;
 		
 		if(host == null || dbName == null || user == null || pass == null) {
-			System.err.println("DB_HOST, DB_NAME. DB_USER, DB_PASS ENV IS NOT SETTED!");
+			Logger.fatal("DB_HOST, DB_NAME. DB_USER, DB_PASS ENV IS NOT SETTED!");
 			System.exit(1);
 		}
 		
@@ -32,8 +35,24 @@ public class SQLPool {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(url, user, pass);
-		}catch(Exception e) {
-			e.printStackTrace();
+		}catch(SQLException e) {
+			String message = "message: " + e.getMessage() + ", SQLState: " + e.getSQLState();
+			switch(e.getSQLState()) {
+			case "28000":
+				message += "\n Please check DB_USER or DB_PASS";
+				break;
+			case "42000":
+				message += "\n Please create database and glant access to user";
+				break;
+			default: 
+				message += "";
+				break;
+			}
+			Logger.fatal(message);
+			System.exit(1);
+		}catch(ClassNotFoundException e) {
+			String message = "message: " + e.getMessage();
+			Logger.fatal(message);
 			System.exit(1);
 		}
 	}

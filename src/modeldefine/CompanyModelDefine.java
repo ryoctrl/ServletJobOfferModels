@@ -1,5 +1,6 @@
 package modeldefine;
 
+import company.Path;
 import model.ModelOption;
 
 public class CompanyModelDefine extends AbstractModelDefine {
@@ -16,6 +17,7 @@ public class CompanyModelDefine extends AbstractModelDefine {
 		columns.put("location", new ModelOption("String", false, 2));
 		columns.put("type", new ModelOption("String", false, 3));
 		columns.put("description", new ModelOption("String", true, 4));
+		columns.put("paths", new ModelOption(Path.class));
 		//columns.put("employees", new ModelOption("int", true, 5));
 	}
 }

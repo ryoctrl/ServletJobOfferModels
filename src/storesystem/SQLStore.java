@@ -11,6 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 import company.Company;
+import company.Constants;
 import company.SQLUtilities;
 import model.ModelOption;
 import model.Models;
@@ -32,7 +33,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 		try {
 			conn = SQLPool.getInstance().getConnection();
 			DatabaseMetaData meta = conn.getMetaData();
-			ResultSet rs = meta.getTables(null, "servlet", store.getModelName(), new String[] {"TABLE"});
+			ResultSet rs = meta.getTables(null, Constants.Environments.DB_NAME, store.getModelName(), new String[] {"TABLE"});
 			if(!rs.next()) {
 				Statement stmt = conn.createStatement();
 				stmt.executeUpdate(store.getModelDefine().getCreateTableQuery());
@@ -45,9 +46,17 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 			ResultSet companiesRs = stmt.executeQuery(SQLUtilities.selectAllQuery(store.getModelName()));
 			
 			Set<String> keys = Models.getModel(store.getModelName()).getModelKeys();
+			LinkedHashMap<String, ModelOption> columns = Models.getModel(store.getModelName()).getModelDefine();
 			while(companiesRs.next()) {
 				T obj = modelClass.newInstance();
-				keys.forEach(key -> {
+				columns.forEach((key, option) -> {
+					if(option.getType().equals("External")) {
+						//TODO: ここをいい感じにセットしたい
+						//現状10行ほど下のincludeExternalRecordIfNeeded(obj)で外部テーブルのオブジェクトをセットしてる
+						//これを動的にセットしたい. setterと、setすべきモデルのクラスobjectは取れてるけど、findAllByCompanyIdは取れてない。
+						//new PropretyDescriptor(key, obj.getClass()).getWriteMethod().invoke(obj, );
+						//option.getExternalModel()
+					}
 					try {
 						new PropertyDescriptor(key, obj.getClass()).getWriteMethod().invoke(obj, companiesRs.getObject(key));
 					}catch(Exception e) {
@@ -73,6 +82,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 			PreparedStatement ps = conn.prepareStatement(SQLUtilities.insertAllValuesQuery(model));
 			LinkedHashMap<String, ModelOption> modelDef = Models.getModel(modelName).getModelDefine();
 			modelDef.forEach((key, option) -> {
+				if(option.getType().equals("External")) return;
 				try {
 					ps.setObject(option.getColumnIndex() + 1, new PropertyDescriptor(key, obj.getClass()).getReadMethod().invoke(obj));
 				}catch(Exception e) {

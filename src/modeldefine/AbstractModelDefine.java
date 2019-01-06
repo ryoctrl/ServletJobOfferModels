@@ -1,6 +1,7 @@
 package modeldefine;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -32,7 +33,12 @@ public abstract class AbstractModelDefine implements IModelDefine {
 	
 	@Override
 	public int getNumberOfColumns() {
-		return columns.size();
+		int count = 0;
+		for(ModelOption option : columns.values()) {
+			if(option.getType().equals("External")) continue;
+			count++;
+		}
+		return count;
 	}
 
 	@Override
@@ -40,6 +46,7 @@ public abstract class AbstractModelDefine implements IModelDefine {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE " + modelName + " (");
 		columns.forEach((key, value) -> {
+			if(value.getType().equals("External")) return;
 			String columnDefineStr = key.equals("id") ? "`id`" : key;
 			String sqlType = "";
 			switch(value.getType()) {

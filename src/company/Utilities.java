@@ -21,6 +21,11 @@ import model.Models;
 import store.AbstractPathStore;
 import utilities.Logger;
 
+/**
+ * TODO: companiesToJsonとpathsToJsonを一つのmodelToJsonに置き換える
+ * @author mosin
+ *
+ */
 public class Utilities {
 	/**
 	 * CompanyObjectのArrayListからjson文字列を生成する.
@@ -41,7 +46,6 @@ public class Utilities {
 					System.exit(1);
 				}
 			});
-			map.put("paths", AbstractPathStore.getInstance().findAllByCompanyId(c.getId()));
 			jsonList.add(map);
 		}
 		JSONArray arr = new JSONArray(jsonList);
@@ -77,7 +81,7 @@ public class Utilities {
 	}
 	
 	public static String readJsonFromFile(String filename) {
-		String jsonDir = System.getenv("JSON_DIR");
+		String jsonDir = Constants.Environments.JSON_DIR;
 		if(jsonDir == null) {
 			Logger.fatal("JSON_DIR ENV IS NOT SETTED!");
 			System.exit(1);
@@ -97,7 +101,14 @@ public class Utilities {
 			}
 			Logger.info(filename + " loaded");
 		} else {
-			Logger.info(filename + " is not found!");
+			
+			try {
+				jsonFile.createNewFile();
+			} catch (IOException e) {
+				Logger.fatal("Failed to create " + jsonFile.getPath());
+				System.exit(1);
+			}
+			Logger.info(filename + " created.");
 			str = "[]";
 		}	
 		if(str.equals("")) {
@@ -108,7 +119,7 @@ public class Utilities {
 	}
 	
 	public static void writeJsonToFile(String filename, String str) {
-		String jsonDir = System.getenv("JSON_DIR");
+		String jsonDir = Constants.Environments.JSON_DIR;
 		if(jsonDir == null) {
 			Logger.fatal("JSON_DIR ENV IS NOT SETTED");
 			System.exit(1);
@@ -118,18 +129,14 @@ public class Utilities {
 		
 		if(jsonFile.exists()) {
 			 try {
-		            // FileWriterクラスのオブジェクトを生成する
 		            FileWriter file = new FileWriter(jsonFile);
-		            // PrintWriterクラスのオブジェクトを生成する
-		            PrintWriter pw = new PrintWriter(new BufferedWriter(file));
-		            
-		            //ファイルに書き込む
+		            PrintWriter pw = new PrintWriter(new BufferedWriter(file));	            
 		            pw.println(str);
-		            
-		            //ファイルを閉じる
 		            pw.close();
+		            Logger.info(jsonFile.getName() + " updated.");
 		        } catch (IOException e) {
-		            e.printStackTrace();
+		        	Logger.fatal(jsonFile.getName() + " " + e.getMessage());
+		            System.exit(1);
 		        }
 		}
 		
