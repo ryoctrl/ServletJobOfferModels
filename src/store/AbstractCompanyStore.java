@@ -3,9 +3,9 @@ package store;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import company.Company;
 import company.CompanyManager;
-import company.Constants;
+import model.models.Company;
+import utilities.Constants;
 
 public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	private static AbstractCompanyStore instance = null;

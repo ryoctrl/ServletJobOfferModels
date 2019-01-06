@@ -1,7 +1,7 @@
-package modeldefine;
+package model.define;
 
-import company.Path;
 import model.ModelOption;
+import model.models.Path;
 
 public class CompanyModelDefine extends AbstractModelDefine {
 	

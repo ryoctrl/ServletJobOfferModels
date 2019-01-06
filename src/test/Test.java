@@ -3,12 +3,12 @@ package test;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 
-import company.Company;
 import company.CompanyManager;
-import company.Path;
-import company.SQLUtilities;
-import company.Utilities;
 import model.Models;
+import model.models.Company;
+import model.models.Path;
+import utilities.SQLUtilities;
+import utilities.Utilities;
 
 public class Test {
 	private CompanyManager cm = null;

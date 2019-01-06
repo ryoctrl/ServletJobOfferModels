@@ -1,8 +1,8 @@
-package store;
+package storesystem;
 
 import java.sql.*;
 
-import company.Constants;
+import utilities.Constants;
 import utilities.Logger;
 
 public class SQLPool {

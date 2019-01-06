@@ -1,4 +1,4 @@
-package company;
+package utilities;
 
 import java.util.HashMap;
 import model.ModelOption;

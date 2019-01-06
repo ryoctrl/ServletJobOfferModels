@@ -9,13 +9,13 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import company.Company;
-import company.Utilities;
 import model.ModelOption;
 import model.Models;
+import model.models.Company;
+import model.models.Storable;
 import store.AbstractStore;
-import store.Storable;
 import utilities.Logger;
+import utilities.Utilities;
 
 public class JsonStore<T extends Storable> extends AbstractStoreSystem<T> {
 

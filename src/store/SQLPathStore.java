@@ -1,6 +1,7 @@
 package store;
 
-import company.Path;
+import model.models.Path;
+import model.models.Storable;
 import storesystem.SQLStore;
 
 public class SQLPathStore extends AbstractPathStore{

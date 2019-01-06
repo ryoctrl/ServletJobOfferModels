@@ -1,4 +1,4 @@
-package modeldefine;
+package model.define;
 
 import model.ModelOption;
 

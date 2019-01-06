@@ -2,10 +2,10 @@ package store;
 
 import java.util.ArrayList;
 
-import company.Company;
-import company.IStore;
 import model.IModelDefine;
 import model.Models;
+import model.models.Company;
+import model.models.Storable;
 import storesystem.AbstractStoreSystem;
 
 public abstract class AbstractStore<T extends Storable> implements IStore<T> {

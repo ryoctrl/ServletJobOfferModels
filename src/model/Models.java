@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.reflections.*;
 
-import modeldefine.AbstractModelDefine;
+import model.define.AbstractModelDefine;
 
 public class Models {
 	private static boolean initialized = false;

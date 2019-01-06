@@ -3,8 +3,8 @@ package storesystem;
 import java.util.ArrayList;
 
 import model.IModelDefine;
+import model.models.Storable;
 import store.AbstractStore;
-import store.Storable;
 
 public abstract class AbstractStoreSystem<T extends Storable> {
 	protected IModelDefine model;

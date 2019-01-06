@@ -2,8 +2,8 @@ package store;
 
 import java.util.ArrayList;
 
-import company.Constants;
-import company.Path;
+import model.models.Path;
+import utilities.Constants;
 
 public abstract class AbstractPathStore extends AbstractStore<Path> {
 	private static AbstractPathStore instance = null;

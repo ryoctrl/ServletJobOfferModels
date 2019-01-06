@@ -1,8 +1,6 @@
-package company;
+package model.models;
 
 import java.util.ArrayList;
-
-import store.Storable;
 
 public class Company extends Storable{
     private String name;

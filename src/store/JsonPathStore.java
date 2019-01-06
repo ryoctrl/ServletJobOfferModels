@@ -1,6 +1,6 @@
 package store;
 
-import company.Path;
+import model.models.Path;
 import storesystem.AbstractStoreSystem;
 import storesystem.JsonStore;
 

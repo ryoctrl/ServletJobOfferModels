@@ -1,6 +1,6 @@
 package model;
 
-import store.Storable;
+import model.models.Storable;
 
 public class ModelOption {
 	private String type;

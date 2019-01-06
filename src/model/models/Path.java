@@ -1,6 +1,4 @@
-package company;
-
-import store.Storable;
+package model.models;
 
 public class Path extends Storable{
     private String path;

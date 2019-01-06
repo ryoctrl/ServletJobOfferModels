@@ -1,6 +1,7 @@
 package store;
 
-import company.Company;
+import model.models.Company;
+import model.models.Storable;
 import storesystem.AbstractStoreSystem;
 import storesystem.SQLStore;
 

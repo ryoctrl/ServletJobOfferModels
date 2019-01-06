@@ -1,4 +1,4 @@
-package store;
+package model.models;
 
 public abstract class Storable {
 	private int id;

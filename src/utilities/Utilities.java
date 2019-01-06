@@ -1,4 +1,4 @@
-package company;
+package utilities;
 
 import java.beans.PropertyDescriptor;
 import java.io.BufferedWriter;
@@ -18,8 +18,10 @@ import org.json.JSONArray;
 
 import model.IModelDefine;
 import model.Models;
+import model.models.Company;
+import model.models.Path;
 import store.AbstractPathStore;
-import utilities.Logger;
+import utilities.Constants.Environments;
 
 /**
  * TODO: companiesToJsonとpathsToJsonを一つのmodelToJsonに置き換える

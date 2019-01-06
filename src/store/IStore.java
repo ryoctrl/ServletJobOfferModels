@@ -1,4 +1,4 @@
-package company;
+package store;
 
 import java.util.ArrayList;
 

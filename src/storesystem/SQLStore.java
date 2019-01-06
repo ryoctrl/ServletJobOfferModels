@@ -10,16 +10,15 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import company.Company;
-import company.Constants;
-import company.SQLUtilities;
 import model.ModelOption;
 import model.Models;
+import model.models.Company;
+import model.models.Storable;
 import store.AbstractPathStore;
 import store.AbstractStore;
-import store.SQLPool;
-import store.Storable;
+import utilities.Constants;
 import utilities.Logger;
+import utilities.SQLUtilities;
 
 public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 	private Connection conn = null;

@@ -2,6 +2,8 @@ package company;
 
 import java.util.ArrayList;
 
+import model.models.Company;
+import model.models.Path;
 import store.AbstractCompanyStore;
 import store.AbstractPathStore;
 
