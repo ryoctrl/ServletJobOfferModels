@@ -87,4 +87,10 @@ public class JsonPathStore extends AbstractPathStore{
 		return paths;
 	}
 
+	@Override
+	public void includeExternalRecordIfNeeded(Path obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
