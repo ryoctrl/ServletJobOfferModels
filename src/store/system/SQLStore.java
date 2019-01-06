@@ -55,6 +55,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 						//これを動的にセットしたい. setterと、setすべきモデルのクラスobjectは取れてるけど、findAllByCompanyIdは取れてない。
 						//new PropretyDescriptor(key, obj.getClass()).getWriteMethod().invoke(obj, );
 						//option.getExternalModel()
+						return;
 					}
 					try {
 						new PropertyDescriptor(key, obj.getClass()).getWriteMethod().invoke(obj, companiesRs.getObject(key));
