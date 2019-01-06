@@ -1,5 +1,6 @@
 package company;
 
+import java.beans.PropertyDescriptor;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -10,21 +11,36 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 
+import model.IModelDefine;
+import model.Models;
+import store.AbstractPathStore;
+
 public class Utilities {
+	/**
+	 * CompanyObjectのArrayListからjson文字列を生成する.
+	 * @param companies
+	 * @return
+	 */
 	public static String companiesToJson(ArrayList<Company> companies) {
 		if(companies == null) return null;
 		ArrayList<HashMap> jsonList = new ArrayList<>();
+		Set<String> keys = Models.getModel("companies").getModelKeys();
 		for(Company c : companies) {
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("id", c.getId());
-			map.put("name", c.getName());
-			map.put("location", c.getLocation());
-			map.put("type", c.getType());
-			map.put("description", c.getDescription());
+			keys.forEach(key -> {
+				try {
+					map.put(key, new PropertyDescriptor(key, c.getClass()).getReadMethod().invoke(c));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			});
+			map.put("paths", AbstractPathStore.getInstance().findAllByCompanyId(c.getId()));
 			jsonList.add(map);
 		}
 		JSONArray arr = new JSONArray(jsonList);
@@ -34,12 +50,17 @@ public class Utilities {
 	public static String pathsToJson(ArrayList<Path> paths) {
 		if(paths == null) return null;
 		ArrayList<HashMap> jsonList = new ArrayList<>();
+		Set<String> keys = Models.getModel("paths").getModelKeys();
 		for(Path p : paths) {
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("id", p.getId());
-			map.put("path", p.getPath());
-			map.put("name", p.getName());
-			map.put("companyId", p.getCompanyId());
+			keys.forEach(key -> {
+				try {
+					map.put(key, new PropertyDescriptor(key, p.getClass()).getReadMethod().invoke(p));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			});
 			jsonList.add(map);
 		}
 		JSONArray arr = new JSONArray(jsonList);

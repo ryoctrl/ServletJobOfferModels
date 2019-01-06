@@ -11,6 +11,10 @@ public class Company extends Storable{
     private String description;
     private ArrayList<Path> paths;
 
+    public Company() {
+    	
+    }
+    
     public Company(int id, String name, String location, String type, String description, ArrayList<Path> paths) {
     	setId(id);
         this.name = name;
@@ -33,14 +37,26 @@ public class Company extends Storable{
         return this.name;
     }
     
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
     public String getLocation() {
     	return this.location;
+    }
+    
+    public void setLocation(String location) {
+    	this.location = location;
     }
     
     public String getType() {
     	return this.type;
     }
-
+    
+    public void setType(String type) {
+    	this.type = type;
+    }
+    
     public ArrayList<Path> getPaths() {
         return this.paths;
     }
@@ -55,5 +71,9 @@ public class Company extends Storable{
     
     public String getDescription() {
     	return this.description;
+    }
+    
+    public void setDescription(String description) {
+    	this.description = description;
     }
 }

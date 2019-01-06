@@ -3,13 +3,14 @@ package store;
 import java.util.ArrayList;
 
 import company.CompanyManager;
+import company.Constants;
 import company.Path;
 
 public abstract class AbstractPathStore extends AbstractStore<Path> {
 	private static AbstractPathStore instance = null;
 	public static AbstractPathStore getInstance() {
 		if(instance == null) {
-			String storageEnv = System.getenv(CompanyManager.STORAGE_KEY);
+			String storageEnv = System.getenv(Constants.Environments.STORAGE_KEY);
 			if(storageEnv == null || (!storageEnv.equals("json") && !storageEnv.equals("sql"))) storageEnv = "json";
 			
 			if(storageEnv.equals("json")) {

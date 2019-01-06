@@ -1,6 +1,6 @@
 package store;
 
-public class Storable {
+public abstract class Storable {
 	private int id;
 	public int getId() {
 		return id;

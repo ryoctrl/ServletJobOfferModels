@@ -5,19 +5,23 @@ import store.Storable;
 public class Path extends Storable{
     private String path;
     private String name;
-    private int companyId;
+    private int company_Id;
+    
+    public Path() {
+    	
+    }
 
     public Path(int id, String path, String name, int companyId) {
         super.setId(id);
         this.path = path;
         this.name = name;
-        this.companyId = companyId;
+        this.company_Id = companyId;
     }
     
     public Path(String path, String name, int companyId) {
     	this.path = path;
     	this.name = name;
-    	this.companyId = companyId;
+    	this.company_Id = companyId;
     }
 
     public String getPath() {
@@ -29,6 +33,26 @@ public class Path extends Storable{
     }
 
     public int getCompanyId() {
-        return this.companyId;
+        return this.company_Id;
+    }
+    
+    public void setPath(String path) {
+    	this.path = path;
+    }
+    
+    public void setName(String name) {
+    	this.name = name;
+    }
+    
+    public void setCompanyId(int companyId) {
+    	this.company_Id = companyId;
+    }
+    
+    public void setCompany_id(int companyId) {
+    	this.company_Id = companyId;
+    }
+    
+    public int getCompany_id() {
+    	return this.company_Id;
     }
 }

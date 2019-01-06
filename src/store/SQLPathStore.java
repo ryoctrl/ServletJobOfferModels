@@ -1,48 +1,56 @@
 package store;
 
+import java.beans.PropertyDescriptor;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Set;
 
 import company.Path;
+import company.SQLUtilities;
+import model.ModelOption;
+import model.Models;
 
 public class SQLPathStore extends AbstractPathStore{
 	private Connection conn = null;
 	
+	@Override
+	protected void modelNameInitialize() {
+		modelName = "paths";
+	}
+	
 	protected SQLPathStore() {
 		super();
+		
 		try {
 			conn = SQLPool.getInstance().getConnection();
-			
 			DatabaseMetaData meta = conn.getMetaData();
-			ResultSet rs = meta.getTables(null, "servlet", "paths", new String[] {"TABLE"});
+			ResultSet rs = meta.getTables(null, "servlet", modelName, new String[] {"TABLE"});
 			if(!rs.next()) {
-				String sqlStr = 
-						"CREATE TABLE paths (" +
-						"`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-						"path TEXT NOT NULL, " + 
-						"name TEXT NOT NULL," +
-						"company_id INT NOT NULL" +
-						");";
 				Statement stmt = conn.createStatement();
-				stmt.executeUpdate(sqlStr);
+				stmt.executeUpdate(model.getCreateTableQuery());
 				stmt.close();
 				System.out.println("paths table created.");
 			}
 			System.out.println("paths table checked");
 			
-			String selectSqlStr = "SELECT * FROM paths";
 			Statement stmt = conn.createStatement();
-			ResultSet companiesRs = stmt.executeQuery(selectSqlStr);
-			while(companiesRs.next()) {
-				int id = companiesRs.getInt("id");
-				String path = companiesRs.getString("path");
-				String name = companiesRs.getString("name");
-				int companyId = companiesRs.getInt("company_id");
-				Path p = new Path(id, path, name, companyId);
+			ResultSet pathsRs = stmt.executeQuery(SQLUtilities.selectAllQuery(modelName));
+			Set<String> keys = Models.getModel(modelName).getModelKeys();
+			while(pathsRs.next()) {
+				Path p = new Path();
+				keys.forEach(key -> {
+					try {
+						new PropertyDescriptor(key, p.getClass()).getWriteMethod().invoke(p, pathsRs.getObject(key));
+					}catch(Exception e) {
+						e.printStackTrace();
+						System.exit(1);
+					}
+				});
 				records.add(p);
 			}
 			stmt.close();
@@ -56,13 +64,28 @@ public class SQLPathStore extends AbstractPathStore{
 		if(conn == null) return;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO paths (path, name, company_id) VALUES (?, ?, ?)");
-			ps.setString(1, obj.getPath());
-			ps.setString(2, obj.getName());
-			ps.setInt(3, obj.getCompanyId());
+			PreparedStatement ps = conn.prepareStatement(SQLUtilities.insertAllValuesQuery(model));
+			LinkedHashMap<String, ModelOption> modelDef = Models.getModel(modelName).getModelDefine();
+			modelDef.forEach((key, option) -> {
+				try {
+					ps.setObject(option.getColumnIndex() + 1, new PropertyDescriptor(key, obj.getClass()).getReadMethod().invoke(obj));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			});
 			int count = ps.executeUpdate();
-			obj.setId(count);
 			ps.close();
+			if(count < 1) {
+				ps.close();
+				return;
+			}
+			Statement s = conn.createStatement();
+			ResultSet rs = s.executeQuery(SQLUtilities.selectAllQueryDesc(modelName));
+			if(!rs.next()) return;
+			obj.setId(rs.getInt("id"));
+			records.add(obj);
+			s.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -84,5 +107,4 @@ public class SQLPathStore extends AbstractPathStore{
 		}
 		return paths;
 	}
-
 }

@@ -2,14 +2,25 @@ package store;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Set;
+import java.beans.PropertyDescriptor;
 import java.sql.*;
 
 import company.Company;
 import company.Path;
+import company.SQLUtilities;
+import model.ModelOption;
+import model.Models;
 
 public class SQLCompanyStore extends AbstractCompanyStore{
 	private Connection conn = null;
 
+	@Override
+	protected void modelNameInitialize() {
+		modelName = "companies";
+	}
+	
 	protected SQLCompanyStore() {
 		super();
 		
@@ -19,31 +30,28 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 			ResultSet rs = meta.getTables(null, "servlet", "companies", new String[] {"TABLE"});
 			if(!rs.next()) {
 				Statement stmt = conn.createStatement();
-				String sqlStr = 
-						"CREATE TABLE companies (" +
-						"`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-						"name TEXT NOT NULL, " + 
-						"location TEXT NOT NULL," +
-						"type TEXT NOT NULL," +
-						"description TEXT" +
-						");";
-				stmt.executeUpdate(sqlStr);
+				stmt.executeUpdate(model.getCreateTableQuery());
 				stmt.close();
 				System.out.println("companies table created.");
 			}
 			System.out.println("companies table checked.");
-			String selectSqlStr = "SELECT * FROM companies";
+			
 			Statement stmt = conn.createStatement();
-			ResultSet companiesRs = stmt.executeQuery(selectSqlStr);
+			ResultSet companiesRs = stmt.executeQuery(SQLUtilities.selectAllQuery(modelName));
+			
 			AbstractPathStore ps = AbstractPathStore.getInstance();
+			Set<String> keys = Models.getModel(modelName).getModelKeys();
 			while(companiesRs.next()) {
-				int id = companiesRs.getInt("id");
-				String name = companiesRs.getString("name");
-				String location = companiesRs.getString("location");
-				String type = companiesRs.getString("type");
-				String description = companiesRs.getString("description");
-				ArrayList<Path> paths = ps.findAllByCompanyId(id);
-				Company c = new Company(id, name, location, type, description, paths);
+				Company c = new Company();
+				keys.forEach(key -> {
+					try {
+						new PropertyDescriptor(key, c.getClass()).getWriteMethod().invoke(c, companiesRs.getObject(key));
+					}catch(Exception e) {
+						e.printStackTrace();
+						System.exit(1);
+					}
+				});
+				c.setPaths(ps.findAllByCompanyId(c.getId()));
 				records.add(c);
 			}
 		}catch(Exception e) {
@@ -56,11 +64,16 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 		if(conn == null) return;
 		
 		try {
-			PreparedStatement ps = conn.prepareStatement("INSERT INTO companies (name, location, type, description) VALUES (?, ?, ?, ?)");
-			ps.setString(1, obj.getName());
-			ps.setString(2, obj.getLocation());
-			ps.setString(3, obj.getType());
-			ps.setString(4, obj.getDescription());
+			PreparedStatement ps = conn.prepareStatement(SQLUtilities.insertAllValuesQuery(model));
+			LinkedHashMap<String, ModelOption> modelDef = Models.getModel(modelName).getModelDefine();
+			modelDef.forEach((key, option) -> {
+				try {
+					ps.setObject(option.getColumnIndex() + 1, new PropertyDescriptor(key, obj.getClass()).getReadMethod().invoke(obj));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			});
 			int count = ps.executeUpdate();
 			ps.close();
 			if(count < 1) {
@@ -68,7 +81,7 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 				return;
 			}
 			Statement s = conn.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM companies ORDER BY id DESC");
+			ResultSet rs = s.executeQuery(SQLUtilities.selectAllQueryDesc(modelName));
 			if(!rs.next()) return;
 			obj.setId(rs.getInt("id"));
 			records.add(obj);

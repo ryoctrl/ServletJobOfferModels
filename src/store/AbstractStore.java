@@ -4,12 +4,18 @@ import java.util.ArrayList;
 
 import company.Company;
 import company.IStore;
+import model.IModelDefine;
+import model.Models;
 
 public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	protected ArrayList<T> records;
+	protected IModelDefine model;
+	protected String modelName;
 	
 	protected AbstractStore() {
 		records = new ArrayList<T>();
+		modelNameInitialize();
+		model = Models.getModel(modelName);
 	}
 	protected int getMaxId() {
 		int maxId = 0;
@@ -27,4 +33,6 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	public ArrayList<T> getAll() {
 		return records;
 	}
+	
+	protected abstract void modelNameInitialize();
 }

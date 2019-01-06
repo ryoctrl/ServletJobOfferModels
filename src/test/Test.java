@@ -1,11 +1,14 @@
 package test;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 
 import company.Company;
 import company.CompanyManager;
 import company.Path;
+import company.SQLUtilities;
 import company.Utilities;
+import model.Models;
 
 public class Test {
 	private CompanyManager cm = null;
@@ -15,8 +18,68 @@ public class Test {
 	}
 	public static void main(String[] args) {
 		Test t = new Test();
-		//t.writeTest();
+		t.writeTest();
 		t.readTest();
+		//t.modelDefineSystemTest();
+		//t.propertyDescriptorTest();
+		//t.sqlQueryBuilder();
+		
+	}
+	
+	public void propertyDescriptorTest() {
+		try {
+			Company c = new Company();
+			PropertyDescriptor nameP = new PropertyDescriptor("name", c.getClass());
+			nameP.getWriteMethod().invoke(c, "test");
+			System.out.println(c.getName());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void sqlQueryBuilder() {
+		String pathsInsert = "INSERT INTO paths (id, path, name, company_id) VALUES (?, ?, ?, ?)";
+		String companiesInsert = "INSERT INTO companies (id, name, location, type, description) VALUES (?, ?, ?, ?, ?)";
+		
+		String companiesBuilder = SQLUtilities.insertAllValuesQuery(Models.getModel("companies"));
+		String pathsBuilder = SQLUtilities.insertAllValuesQuery(Models.getModel("paths"));
+		
+		System.out.println(pathsInsert);
+		System.out.println(pathsBuilder);
+		System.out.println(pathsInsert.equals(pathsBuilder));
+		
+		System.out.println(companiesInsert);
+		System.out.println(companiesBuilder);
+		System.out.println(companiesBuilder.equals(companiesInsert));
+	}
+	
+	public void modelDefineSystemTest() {
+		String companiesQuery = Models.getModel("companies").getCreateTableQuery();
+		System.out.println(companiesQuery);
+		String str = "CREATE TABLE companies (" +
+				"`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+				"name TEXT NOT NULL," + 
+				"location TEXT NOT NULL," +
+				"type TEXT NOT NULL," +
+				"description TEXT" +
+				");";
+		System.out.println(str);
+		System.out.println("companies is suucess : " + str.equals(companiesQuery));
+		
+		String pathsQuery = Models.getModel("paths").getCreateTableQuery();
+		System.out.println(pathsQuery);
+		
+		str = 		"CREATE TABLE paths (" +
+				"`id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+				"path TEXT NOT NULL," + 
+				"name TEXT NOT NULL," +
+				"company_id INT NOT NULL" +
+				");";
+		
+		System.out.println(str);
+		System.out.println("paths is success : " + str.equals(pathsQuery));
+		
 	}
 	
 	public void writeTest() {
@@ -50,5 +113,8 @@ public class Test {
 		str = Utilities.companiesToJson(cm.findAllByTypes(new String[] {"SIer", "Webベンチャー"}));
 		System.out.println("業種がSIerとWebベンチャーの企業を表示します");
 		System.out.println(str);
+		
+		ArrayList<Company> companies = cm.getAllCompanies();
+		for(Company c : companies) System.out.println(c.getDescription());
 	}
 }

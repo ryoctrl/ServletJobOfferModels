@@ -1,14 +1,17 @@
 package store;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Set;
 
 import org.json.JSONObject;
 
 import company.Company;
 import company.Path;
 import company.Utilities;
+import model.Models;
 
 import org.json.JSONArray;
 
@@ -16,22 +19,31 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 	public static final String jsonFileName = "companies.json";
 	private String jsonStr = "";
 	
+	@Override
+	protected void modelNameInitialize() {
+		modelName = "companies";
+	}
+	
 	protected JsonCompanyStore() {
 		super();
 		jsonStr = Utilities.readJsonFromFile(jsonFileName);
 		
 		JSONArray jsonArray = new JSONArray(jsonStr);
 		AbstractPathStore ps = AbstractPathStore.getInstance();
+		Set<String> keys = Models.getModel(modelName).getModelKeys();
 		for(Object o : jsonArray) {
 			if( o instanceof JSONObject) {
+				Company c = new Company();
 				JSONObject obj = (JSONObject) o;
-				int id = obj.getInt("id");
-				String name = obj.getString("name");
-				String location = obj.getString("location");
-				String type = obj.getString("type");
-				String description = obj.getString("description");
-				ArrayList<Path> paths = ps.findAllByCompanyId(id);
-				Company c = new Company(id, name, location, type, description, paths);
+				keys.forEach(key -> {
+					try {
+						new PropertyDescriptor(key, c.getClass()).getWriteMethod().invoke(c, obj.get(key));
+					}catch(Exception e) {
+						e.printStackTrace();
+						System.exit(1);
+					}
+				});
+				c.setPaths(ps.findAllByCompanyId(c.getId()));
 				records.add(c);
 			}
 		}
@@ -39,13 +51,17 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 	
 	private void saveToJson() {
 		ArrayList<HashMap> jsonList = new ArrayList<>();
+		Set<String> keys = Models.getModel(modelName).getModelKeys();
 		for(Company c : records) {
 			HashMap<String, Object> map = new HashMap<>();
-			map.put("id", c.getId());
-			map.put("name", c.getName());
-			map.put("location", c.getLocation());
-			map.put("type", c.getType());
-			map.put("description", c.getDescription());
+			keys.forEach(key -> {
+				try {
+					map.put(key, new PropertyDescriptor(key, c.getClass()).getReadMethod().invoke(c));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			});
 			jsonList.add(map);
 		}
 		JSONArray arr = new JSONArray(jsonList);
