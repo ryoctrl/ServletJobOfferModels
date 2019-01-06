@@ -1,6 +1,7 @@
 package model;
 
 import model.models.Storable;
+import utilities.Constants;
 
 public class ModelOption {
 	private String type;
@@ -31,7 +32,7 @@ public class ModelOption {
 	}
 	
 	public ModelOption(Class<? extends Storable> externalModel) {
-		this.type = "External";
+		this.type = Constants.ModelTypes.EXTERNAL_COLUMN;
 		this.externalModel = externalModel;
 	}
 	

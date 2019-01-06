@@ -1,8 +1,5 @@
 package utilities;
 
-import java.util.HashMap;
-import model.ModelOption;
-
 public final class Constants {
 	private Constants() {
 	}
@@ -13,6 +10,15 @@ public final class Constants {
 		public static final String DB_HOST = System.getenv("DB_HOST");
 		public static final String DB_USER = System.getenv("DB_USER");
 		public static final String DB_PASS = System.getenv("DB_PASS");
-		
+	}
+	
+	public static class Keys {
+		public static final String MODEL_DEFINE_PACKAGE = "model.define";
+	}
+	
+	public static class ModelTypes {
+		public static final String EXTERNAL_COLUMN = "External";
+		public static final String STRING_COLUMN = "String";
+		public static final String INTEGER_COLUMN = "int";
 	}
 }

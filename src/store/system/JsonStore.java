@@ -14,6 +14,7 @@ import model.Models;
 import model.models.Company;
 import model.models.Storable;
 import store.AbstractStore;
+import utilities.Constants;
 import utilities.Logger;
 import utilities.Utilities;
 
@@ -36,7 +37,7 @@ public class JsonStore<T extends Storable> extends AbstractStoreSystem<T> {
 		for(T c : records) {
 			HashMap<String, Object> map = new HashMap<>();
 			columns.forEach((key, option) -> {
-				if(option.getType().equals("External")) return;
+				if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
 				try {
 					map.put(key, new PropertyDescriptor(key, c.getClass()).getReadMethod().invoke(c));
 				}catch(Exception e) {
@@ -64,7 +65,7 @@ public class JsonStore<T extends Storable> extends AbstractStoreSystem<T> {
 					T modelObj = modelClass.newInstance();
 					JSONObject obj = (JSONObject) o;
 					columns.forEach((key, option) -> {
-						if(option.getType().equals("External")) return;
+						if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
 						try {
 							new PropertyDescriptor(key, modelObj.getClass()).getWriteMethod().invoke(modelObj, obj.get(key));
 						}catch(Exception e) {

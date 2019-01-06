@@ -21,7 +21,7 @@ public class SQLUtilities {
 		LinkedHashMap<String, ModelOption> columns = def.getModelDefine();
 		StringBuilder sb = new StringBuilder(query);
 		columns.forEach((key, option) -> {
-			if(option.getType().equals("External")) return;
+			if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
 			sb.append(key + ", ");
 		});
 		sb.setLength(sb.length() - 2);

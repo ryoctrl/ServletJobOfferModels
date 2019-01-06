@@ -49,7 +49,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 			while(companiesRs.next()) {
 				T obj = modelClass.newInstance();
 				columns.forEach((key, option) -> {
-					if(option.getType().equals("External")) {
+					if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) {
 						//TODO: ここをいい感じにセットしたい
 						//現状10行ほど下のincludeExternalRecordIfNeeded(obj)で外部テーブルのオブジェクトをセットしてる
 						//これを動的にセットしたい. setterと、setすべきモデルのクラスobjectは取れてるけど、findAllByCompanyIdは取れてない。
@@ -81,7 +81,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 			PreparedStatement ps = conn.prepareStatement(SQLUtilities.insertAllValuesQuery(model));
 			LinkedHashMap<String, ModelOption> modelDef = Models.getModel(modelName).getModelDefine();
 			modelDef.forEach((key, option) -> {
-				if(option.getType().equals("External")) return;
+				if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
 				try {
 					ps.setObject(option.getColumnIndex() + 1, new PropertyDescriptor(key, obj.getClass()).getReadMethod().invoke(obj));
 				}catch(Exception e) {

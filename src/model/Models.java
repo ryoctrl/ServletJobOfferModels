@@ -6,6 +6,7 @@ import java.util.Set;
 import org.reflections.*;
 
 import model.define.AbstractModelDefine;
+import utilities.Constants;
 
 public class Models {
 	private static boolean initialized = false;
@@ -13,7 +14,7 @@ public class Models {
 	
 	public static void initializeIfNeeded() {
 		if(initialized) return;
-		Reflections ref = new Reflections("modeldefine");
+		Reflections ref = new Reflections(Constants.Keys.MODEL_DEFINE_PACKAGE);
 		Set<Class<? extends AbstractModelDefine>> modelClasses = ref.getSubTypesOf(AbstractModelDefine.class);
 		modelClasses.forEach(model -> {
 			try {

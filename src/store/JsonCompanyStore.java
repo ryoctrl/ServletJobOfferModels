@@ -1,7 +1,6 @@
 package store;
 
 import model.models.Company;
-import store.system.AbstractStoreSystem;
 import store.system.JsonStore;
 
 public class JsonCompanyStore extends AbstractCompanyStore{

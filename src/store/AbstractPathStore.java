@@ -49,6 +49,4 @@ public abstract class AbstractPathStore extends AbstractStore<Path> {
 	
 	@Override
 	public void includeExternalRecordIfNeeded(Path obj) {}
-	
-	
 }

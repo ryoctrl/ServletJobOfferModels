@@ -7,6 +7,7 @@ import java.util.Set;
 
 import model.IModelDefine;
 import model.ModelOption;
+import utilities.Constants;
 
 public abstract class AbstractModelDefine implements IModelDefine {
 	protected LinkedHashMap<String, ModelOption> columns = null;
@@ -35,7 +36,7 @@ public abstract class AbstractModelDefine implements IModelDefine {
 	public int getNumberOfColumns() {
 		int count = 0;
 		for(ModelOption option : columns.values()) {
-			if(option.getType().equals("External")) continue;
+			if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) continue;
 			count++;
 		}
 		return count;
@@ -46,7 +47,7 @@ public abstract class AbstractModelDefine implements IModelDefine {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE " + modelName + " (");
 		columns.forEach((key, value) -> {
-			if(value.getType().equals("External")) return;
+			if(value.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
 			String columnDefineStr = key.equals("id") ? "`id`" : key;
 			String sqlType = "";
 			switch(value.getType()) {
