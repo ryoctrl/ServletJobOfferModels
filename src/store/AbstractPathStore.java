@@ -2,7 +2,6 @@ package store;
 
 import java.util.ArrayList;
 
-import company.CompanyManager;
 import company.Constants;
 import company.Path;
 
@@ -22,11 +21,34 @@ public abstract class AbstractPathStore extends AbstractStore<Path> {
 		return instance;
 	}
 	
+	protected AbstractPathStore() {
+		super();
+		initializeStoreSystem();
+		records = storeSystem.initialLoad(Path.class);
+	}
+	
 	@Override
 	public void insert(Path obj) {
 		obj.setId(getMaxId() + 1);
 	}
 	
-	public abstract Path findOneById(int id);
-	public abstract ArrayList<Path> findAllByCompanyId(int id);
+	public Path findOneById(int id) {
+		for(Path record : records) {
+			if(id == record.getId()) return record;
+		}
+		return null;
+	}
+	
+	public ArrayList<Path> findAllByCompanyId(int id) {
+		ArrayList<Path> paths = new ArrayList<>();
+		for(Path record : records) {
+			if(record.getCompanyId() == id) paths.add(record);
+		}
+		return paths;
+	}
+	
+	@Override
+	public void includeExternalRecordIfNeeded(Path obj) {}
+	
+	
 }

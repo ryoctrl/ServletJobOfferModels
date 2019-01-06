@@ -2,14 +2,19 @@ package storesystem;
 
 import java.util.ArrayList;
 
+import model.IModelDefine;
 import store.AbstractStore;
 import store.Storable;
 
 public abstract class AbstractStoreSystem<T extends Storable> {
+	protected IModelDefine model;
+	protected String modelName;
 	protected AbstractStore<T> store;
 	public AbstractStoreSystem(AbstractStore<T> store) {
 		this.store = store;
+		model = store.getModelDefine();
+		modelName = store.getModelName();
 	}
 	public abstract ArrayList<T> initialLoad(Class<T> modelClass);
-	public abstract void insert(T obj);
+	public abstract T insert(T obj);
 }

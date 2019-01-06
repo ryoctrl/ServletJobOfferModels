@@ -10,6 +10,7 @@ public class Company extends Storable{
     private String type;
     private String description;
     private ArrayList<Path> paths;
+    //private int employees;
 
     public Company() {
     	
@@ -76,4 +77,12 @@ public class Company extends Storable{
     public void setDescription(String description) {
     	this.description = description;
     }
+    
+//    public void setEmployees(int employees) {
+//    	this.employees = employees;
+//    }
+//    
+//    public int getEmployees() {
+//    	return this.employees;
+//    }
 }

@@ -8,4 +8,8 @@ public class Logger {
 		message = now.toString() + " " +message;
 		System.out.println(message);
 	}
+	
+	public static void fatal(String message) {
+		
+	}
 }

@@ -19,6 +19,7 @@ import org.json.JSONArray;
 import model.IModelDefine;
 import model.Models;
 import store.AbstractPathStore;
+import utilities.Logger;
 
 public class Utilities {
 	/**
@@ -67,16 +68,22 @@ public class Utilities {
 		return arr.toString();
 	}
 	
+	public static String readJsonFromFileByModelName(String modelName) {
+		return readJsonFromFile(modelName + ".json");
+	}
+	
+	public static void writeJsonToFileByModelName(String modelName, String str) {
+		writeJsonToFile(modelName + ".json", str);
+	}
+	
 	public static String readJsonFromFile(String filename) {
 		String jsonDir = System.getenv("JSON_DIR");
 		if(jsonDir == null) {
-			System.err.println("JSON_DIR ENV IS NOT SETTED!");
+			Logger.fatal("JSON_DIR ENV IS NOT SETTED!");
 			System.exit(1);
 		}
 		
 		File jsonFile = new File(jsonDir, filename);
-		
-		System.out.println("reading : " + jsonFile.getAbsolutePath());
 		
 		String str = "";
 		if(jsonFile.exists()) {
@@ -88,8 +95,9 @@ public class Utilities {
 				e.printStackTrace();
 				str = "[]";
 			}
+			Logger.info(filename + " loaded");
 		} else {
-			System.out.println("File not found!");
+			Logger.info(filename + " is not found!");
 			str = "[]";
 		}	
 		if(str.equals("")) {
@@ -102,7 +110,7 @@ public class Utilities {
 	public static void writeJsonToFile(String filename, String str) {
 		String jsonDir = System.getenv("JSON_DIR");
 		if(jsonDir == null) {
-			System.err.println("JSON_DIR ENV IS NOT SETTED!");
+			Logger.fatal("JSON_DIR ENV IS NOT SETTED");
 			System.exit(1);
 		}
 		

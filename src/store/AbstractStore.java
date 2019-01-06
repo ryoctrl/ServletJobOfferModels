@@ -6,15 +6,17 @@ import company.Company;
 import company.IStore;
 import model.IModelDefine;
 import model.Models;
+import storesystem.AbstractStoreSystem;
 
 public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	protected ArrayList<T> records;
 	protected IModelDefine model;
 	protected String modelName;
+	protected AbstractStoreSystem<T> storeSystem;
 	
 	protected AbstractStore() {
 		records = new ArrayList<T>();
-		modelNameInitialize();
+		initializeModelName();
 		model = Models.getModel(modelName);
 	}
 	
@@ -45,5 +47,6 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	
 	public abstract void includeExternalRecordIfNeeded(T obj);
 	
-	protected abstract void modelNameInitialize();
+	protected abstract void initializeModelName();
+	protected abstract void initializeStoreSystem();
 }

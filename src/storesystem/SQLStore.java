@@ -3,13 +3,16 @@ package storesystem;
 import java.beans.PropertyDescriptor;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import company.Company;
 import company.SQLUtilities;
+import model.ModelOption;
 import model.Models;
 import store.AbstractPathStore;
 import store.AbstractStore;
@@ -63,9 +66,36 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 	}
 
 	@Override
-	public void insert(T obj) {
-		// TODO Auto-generated method stub
+	public T insert(T obj) {
+		if(conn == null) return null;
 		
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQLUtilities.insertAllValuesQuery(model));
+			LinkedHashMap<String, ModelOption> modelDef = Models.getModel(modelName).getModelDefine();
+			modelDef.forEach((key, option) -> {
+				try {
+					ps.setObject(option.getColumnIndex() + 1, new PropertyDescriptor(key, obj.getClass()).getReadMethod().invoke(obj));
+				}catch(Exception e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			});
+			int count = ps.executeUpdate();
+			ps.close();
+			if(count < 1) {
+				ps.close();
+				return null;
+			}
+			Statement s = conn.createStatement();
+			ResultSet rs = s.executeQuery(SQLUtilities.selectAllQueryDesc(modelName));
+			if(!rs.next()) return null;
+			obj.setId(rs.getInt("id"));
+			s.close();
+			return obj;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

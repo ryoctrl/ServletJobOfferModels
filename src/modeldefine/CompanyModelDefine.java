@@ -16,5 +16,6 @@ public class CompanyModelDefine extends AbstractModelDefine {
 		columns.put("location", new ModelOption("String", false, 2));
 		columns.put("type", new ModelOption("String", false, 3));
 		columns.put("description", new ModelOption("String", true, 4));
+		//columns.put("employees", new ModelOption("int", true, 5));
 	}
 }
