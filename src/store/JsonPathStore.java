@@ -8,7 +8,6 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import company.Company;
 import company.Path;
 import company.Utilities;
 import model.Models;

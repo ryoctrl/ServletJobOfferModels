@@ -17,6 +17,7 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 		modelNameInitialize();
 		model = Models.getModel(modelName);
 	}
+	
 	protected int getMaxId() {
 		int maxId = 0;
 		for(T record : records) {
@@ -33,6 +34,16 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	public ArrayList<T> getAll() {
 		return records;
 	}
+	
+	public String getModelName() {
+		return this.modelName;
+	}
+	
+	public IModelDefine getModelDefine() {
+		return this.model;
+	}
+	
+	public abstract void includeExternalRecordIfNeeded(T obj);
 	
 	protected abstract void modelNameInitialize();
 }

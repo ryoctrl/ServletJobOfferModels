@@ -27,6 +27,11 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 		obj.setId(getMaxId() + 1);
 	}
 	
+	@Override
+	public void includeExternalRecordIfNeeded(Company obj) {
+		obj.setPaths(AbstractPathStore.getInstance().findAllByCompanyId(obj.getId()));
+	}
+	
 	public abstract Company findOneById(int id);
 	public abstract Company findOneByName(String name);
 	public abstract ArrayList<Company> findAllByLocation(String location);

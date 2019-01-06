@@ -8,12 +8,14 @@ import java.beans.PropertyDescriptor;
 import java.sql.*;
 
 import company.Company;
-import company.Path;
 import company.SQLUtilities;
 import model.ModelOption;
 import model.Models;
+import storesystem.AbstractStoreSystem;
+import storesystem.SQLStore;
 
 public class SQLCompanyStore extends AbstractCompanyStore{
+	private AbstractStoreSystem storeSystem;
 	private Connection conn = null;
 
 	@Override
@@ -23,42 +25,10 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 	
 	protected SQLCompanyStore() {
 		super();
-		
-		try {
-			conn = SQLPool.getInstance().getConnection();
-			DatabaseMetaData meta = conn.getMetaData();
-			ResultSet rs = meta.getTables(null, "servlet", "companies", new String[] {"TABLE"});
-			if(!rs.next()) {
-				Statement stmt = conn.createStatement();
-				stmt.executeUpdate(model.getCreateTableQuery());
-				stmt.close();
-				System.out.println("companies table created.");
-			}
-			System.out.println("companies table checked.");
-			
-			Statement stmt = conn.createStatement();
-			ResultSet companiesRs = stmt.executeQuery(SQLUtilities.selectAllQuery(modelName));
-			
-			AbstractPathStore ps = AbstractPathStore.getInstance();
-			Set<String> keys = Models.getModel(modelName).getModelKeys();
-			while(companiesRs.next()) {
-				Company c = new Company();
-				keys.forEach(key -> {
-					try {
-						new PropertyDescriptor(key, c.getClass()).getWriteMethod().invoke(c, companiesRs.getObject(key));
-					}catch(Exception e) {
-						e.printStackTrace();
-						System.exit(1);
-					}
-				});
-				c.setPaths(ps.findAllByCompanyId(c.getId()));
-				records.add(c);
-			}
-		}catch(Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		storeSystem = new SQLStore<Company>(this);
+		records = storeSystem.initialLoad(Company.class);
 	}
+	
 	@Override
 	public void insert(Company obj) {
 		if(conn == null) return;

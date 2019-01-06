@@ -10,12 +10,16 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
+import company.Company;
 import company.Path;
 import company.SQLUtilities;
 import model.ModelOption;
 import model.Models;
+import storesystem.AbstractStoreSystem;
+import storesystem.SQLStore;
 
 public class SQLPathStore extends AbstractPathStore{
+	private AbstractStoreSystem storeSystem;
 	private Connection conn = null;
 	
 	@Override
@@ -25,39 +29,8 @@ public class SQLPathStore extends AbstractPathStore{
 	
 	protected SQLPathStore() {
 		super();
-		
-		try {
-			conn = SQLPool.getInstance().getConnection();
-			DatabaseMetaData meta = conn.getMetaData();
-			ResultSet rs = meta.getTables(null, "servlet", modelName, new String[] {"TABLE"});
-			if(!rs.next()) {
-				Statement stmt = conn.createStatement();
-				stmt.executeUpdate(model.getCreateTableQuery());
-				stmt.close();
-				System.out.println("paths table created.");
-			}
-			System.out.println("paths table checked");
-			
-			Statement stmt = conn.createStatement();
-			ResultSet pathsRs = stmt.executeQuery(SQLUtilities.selectAllQuery(modelName));
-			Set<String> keys = Models.getModel(modelName).getModelKeys();
-			while(pathsRs.next()) {
-				Path p = new Path();
-				keys.forEach(key -> {
-					try {
-						new PropertyDescriptor(key, p.getClass()).getWriteMethod().invoke(p, pathsRs.getObject(key));
-					}catch(Exception e) {
-						e.printStackTrace();
-						System.exit(1);
-					}
-				});
-				records.add(p);
-			}
-			stmt.close();
-		}catch(Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+		storeSystem = new SQLStore<Path>(this);
+		records = storeSystem.initialLoad(Path.class);
 	}
 	@Override
 	public void insert(Path obj) {
@@ -107,4 +80,7 @@ public class SQLPathStore extends AbstractPathStore{
 		}
 		return paths;
 	}
+
+	@Override
+	public void includeExternalRecordIfNeeded(Path obj) {}
 }
