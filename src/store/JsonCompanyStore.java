@@ -8,11 +8,6 @@ public class JsonCompanyStore extends AbstractCompanyStore{
 		super();
 	}
 	
-	@Override
-	protected void initializeModelName() {
-		modelName = "companies";
-	}
-	
 	protected void initializeStoreSystem() {
 		storeSystem = new JsonStore<Company>(this);
 	}

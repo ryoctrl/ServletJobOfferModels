@@ -3,7 +3,6 @@ package store;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import company.CompanyManager;
 import model.models.Company;
 import utilities.Constants;
 
@@ -25,13 +24,12 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	
 	protected AbstractCompanyStore() {
 		super();
-		initializeStoreSystem();
 		records = storeSystem.initialLoad(Company.class);
 	}
 	
 	@Override
-	public void insert(Company obj) {
-		obj.setId(getMaxId() + 1);
+	protected void initializeModelName() {
+		modelName = "companies";
 	}
 	
 	@Override

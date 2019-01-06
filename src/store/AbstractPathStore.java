@@ -21,16 +21,19 @@ public abstract class AbstractPathStore extends AbstractStore<Path> {
 		return instance;
 	}
 	
+	
 	protected AbstractPathStore() {
 		super();
-		initializeStoreSystem();
 		records = storeSystem.initialLoad(Path.class);
 	}
 	
 	@Override
-	public void insert(Path obj) {
-		obj.setId(getMaxId() + 1);
+	protected void initializeModelName() {
+		modelName = "companies";
 	}
+
+	@Override
+	public void includeExternalRecordIfNeeded(Path obj) {}
 	
 	public Path findOneById(int id) {
 		for(Path record : records) {
@@ -47,6 +50,5 @@ public abstract class AbstractPathStore extends AbstractStore<Path> {
 		return paths;
 	}
 	
-	@Override
-	public void includeExternalRecordIfNeeded(Path obj) {}
+
 }

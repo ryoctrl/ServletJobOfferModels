@@ -17,6 +17,7 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 		records = new ArrayList<T>();
 		initializeModelName();
 		model = Models.getModel(modelName);
+		initializeStoreSystem();
 	}
 	
 	protected int getMaxId() {
@@ -25,7 +26,13 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 			int currentId = record.getId();
 			maxId = maxId < currentId ? currentId : maxId;
 		}
+		System.out.println("AbstractStore returning : " + maxId);
 		return maxId;
+	}
+	
+	@Override
+	public void insert(T obj) {
+		obj.setId(getMaxId() + 1);
 	}
 	
 	@Override

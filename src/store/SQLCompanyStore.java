@@ -2,18 +2,17 @@ package store;
 
 import model.models.Company;
 import model.models.Storable;
-import store.system.AbstractStoreSystem;
 import store.system.SQLStore;
 
+/**
+ * There is the problem of can't access to same object when register new path object if override query methods By SQL Query.
+ * @author mosin
+ *
+ */
 public class SQLCompanyStore extends AbstractCompanyStore{
 	
 	protected SQLCompanyStore() {
 		super();
-	}
-	
-	@Override
-	protected void initializeModelName() {
-		modelName = "companies";
 	}
 	
 	@Override
@@ -29,20 +28,4 @@ public class SQLCompanyStore extends AbstractCompanyStore{
 		}
 		records.add((Company)insertedCompany);
 	}
-
-//There is the problem of can't access to same object when register new path object
-//	@Override
-//	public Company findOneById(int id) {
-//		if(id < 1) return null;
-//		String sql = "SELECT * FROM companies WHERE id = " + id;
-//		try {
-//			Statement s = conn.createStatement();
-//			ResultSet result = s.executeQuery(sql);
-//			if(!result.next()) return null;
-//			return new Company(result.getInt("id"), result.getString("name"), result.getString("location"), result.getString("type"), null);
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
 }

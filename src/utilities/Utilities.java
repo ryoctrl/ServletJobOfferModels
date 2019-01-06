@@ -16,17 +16,14 @@ import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 
-import model.IModelDefine;
 import model.Models;
 import model.models.Company;
 import model.models.Path;
-import store.AbstractPathStore;
-import utilities.Constants.Environments;
+import model.models.Storable;
 
 /**
- * TODO: companiesToJsonとpathsToJsonを一つのmodelToJsonに置き換える
+ * 
  * @author mosin
- *
  */
 public class Utilities {
 	/**
@@ -35,34 +32,22 @@ public class Utilities {
 	 * @return
 	 */
 	public static String companiesToJson(ArrayList<Company> companies) {
-		if(companies == null) return null;
-		ArrayList<HashMap> jsonList = new ArrayList<>();
-		Set<String> keys = Models.getModel("companies").getModelKeys();
-		for(Company c : companies) {
+		return modelsToJsonByModelArray("companies", companies);
+	}
+	
+	public static String pathsToJson(ArrayList<Path> paths) {
+		return modelsToJsonByModelArray("paths", paths);
+	}
+	
+	private static String modelsToJsonByModelArray(String modelName, ArrayList<? extends Storable> modelArray) {
+		if(modelArray == null) return "";
+		ArrayList<HashMap<String, Object>> jsonList = new ArrayList<>();
+		Set<String> keys = Models.getModel(modelName).getModelKeys();
+		for(Storable c : modelArray) {
 			HashMap<String, Object> map = new HashMap<>();
 			keys.forEach(key -> {
 				try {
 					map.put(key, new PropertyDescriptor(key, c.getClass()).getReadMethod().invoke(c));
-				}catch(Exception e) {
-					e.printStackTrace();
-					System.exit(1);
-				}
-			});
-			jsonList.add(map);
-		}
-		JSONArray arr = new JSONArray(jsonList);
-		return arr.toString();
-	}
-	
-	public static String pathsToJson(ArrayList<Path> paths) {
-		if(paths == null) return null;
-		ArrayList<HashMap> jsonList = new ArrayList<>();
-		Set<String> keys = Models.getModel("paths").getModelKeys();
-		for(Path p : paths) {
-			HashMap<String, Object> map = new HashMap<>();
-			keys.forEach(key -> {
-				try {
-					map.put(key, new PropertyDescriptor(key, p.getClass()).getReadMethod().invoke(p));
 				}catch(Exception e) {
 					e.printStackTrace();
 					System.exit(1);
