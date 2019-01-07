@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.IModelDefine;
 import model.Models;
 import model.models.Storable;
+import model.modelstores.AbstractModelStore;
 import store.system.AbstractStoreSystem;
 
 public abstract class AbstractStore<T extends Storable> implements IStore<T> {
@@ -12,12 +13,17 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 	protected IModelDefine model;
 	protected String modelName;
 	protected AbstractStoreSystem<T> storeSystem;
+	protected AbstractModelStore<T> parent;
 	
-	protected AbstractStore() {
-		records = new ArrayList<T>();
-		initializeModelName();
+	protected AbstractStore(AbstractModelStore<T> parent) {
+		this.parent = parent;
+		modelName = parent.getModelName();
 		model = Models.getModel(modelName);
 		initializeStoreSystem();
+	}
+	
+	public void recordsInitialize() {
+		records = storeSystem.initialLoad(parent.getModelClass());
 	}
 	
 	protected int getMaxId() {
@@ -26,7 +32,6 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 			int currentId = record.getId();
 			maxId = maxId < currentId ? currentId : maxId;
 		}
-		System.out.println("AbstractStore returning : " + maxId);
 		return maxId;
 	}
 	
@@ -48,8 +53,9 @@ public abstract class AbstractStore<T extends Storable> implements IStore<T> {
 		return this.model;
 	}
 	
-	public abstract void includeExternalRecordIfNeeded(T obj);
+	public void includeForeignRecordIfNeeded(T obj) {
+		parent.includeForeignRecordIfNeeded(obj);
+	}
 	
-	protected abstract void initializeModelName();
 	protected abstract void initializeStoreSystem();
 }

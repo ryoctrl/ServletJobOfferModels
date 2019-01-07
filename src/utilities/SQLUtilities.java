@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 
 import model.IModelDefine;
 import model.ModelOption;
+import utilities.Constants.ModelType;
 
 public class SQLUtilities {
 	public static String selectAllQuery(String from) {
@@ -21,7 +22,7 @@ public class SQLUtilities {
 		LinkedHashMap<String, ModelOption> columns = def.getModelDefine();
 		StringBuilder sb = new StringBuilder(query);
 		columns.forEach((key, option) -> {
-			if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
+			if(option.getType() == ModelType.FOREIGN) return;
 			sb.append(key + ", ");
 		});
 		sb.setLength(sb.length() - 2);

@@ -14,11 +14,45 @@ public final class Constants {
 	
 	public static class Keys {
 		public static final String MODEL_DEFINE_PACKAGE = "model.define";
+		public static final String MODEL_STORE_PACKAGE = "model.modelstores";
 	}
 	
-	public static class ModelTypes {
-		public static final String EXTERNAL_COLUMN = "External";
-		public static final String STRING_COLUMN = "String";
-		public static final String INTEGER_COLUMN = "int";
+	public enum StoreType {
+		JSON("json"),
+		MY_SQL("sql");
+		
+		private final String storageType;
+		
+		private StoreType(final String storageType) {
+			this.storageType = storageType;
+		}
+		
+		public String getStorageType() {
+			return this.storageType;
+		}
+		
+		public static StoreType getCurrentStoreType() {
+			for(StoreType s : StoreType.values()) {
+				if(s.getStorageType().equals(Constants.Environments.STORAGE_TYPE)) return s;
+			}
+			return StoreType.JSON;
+		}
+	}
+	
+	public enum ModelType {
+		FOREIGN(null),
+		STRING("TEXT"),
+		INTEGER("INT");
+		
+		private final String sqlType;
+		
+		private ModelType(final String sqlType) {
+			this.sqlType = sqlType;
+		}
+		
+		public String getSqlType() {
+			return this.sqlType;
+		}
+		
 	}
 }

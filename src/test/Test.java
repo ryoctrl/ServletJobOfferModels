@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import company.CompanyManager;
 import model.Models;
 import model.models.Company;
-import model.models.Path;
 import utilities.SQLUtilities;
 import utilities.Utilities;
 
@@ -18,7 +17,7 @@ public class Test {
 	}
 	public static void main(String[] args) {
 		Test t = new Test();
-		//t.writeTest();
+		t.writeTest();
 		t.readTest();
 		//t.modelDefineSystemTest();
 		//t.propertyDescriptorTest();
@@ -85,8 +84,8 @@ public class Test {
 	public void writeTest() {
 		Company tgl = cm.registerNewCompany("TGL", "大阪", "SIer", "大阪のシステムインテグレーター.");
 		Company yahoo = cm.registerNewCompany("Yahoo", "東京", "Webベンチャー", "検索エンジンポータルや各種Webサービスを展開している");
-		Company ca = cm.registerNewCompany("CyberAgent", "東京", "Webベンチャー", "スマホ向けコンテンツを主とした若年層向けサービスを多く展開");
-		Company il = cm.registerNewCompany("InfiniteLoop", "北海道", "Webベンチャー", "VTuber事業を展開.みゅみゅが所属している");
+		cm.registerNewCompany("CyberAgent", "東京", "Webベンチャー", "スマホ向けコンテンツを主とした若年層向けサービスを多く展開");
+		cm.registerNewCompany("InfiniteLoop", "北海道", "Webベンチャー", "VTuber事業を展開.みゅみゅが所属している");
 		
 		cm.registerNewPath("tgl/intern", "TGLのインターン案内", tgl.getId());
 		cm.registerNewPath("tgl/college", "TGL-Collegeの案内", tgl.getId());

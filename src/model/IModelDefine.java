@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
@@ -9,4 +10,5 @@ public interface IModelDefine {
 	public Set<String> getModelKeys();
 	public String getCreateTableQuery();
 	public int getNumberOfColumns();
+	public ArrayList<String> getDependencies();
 }

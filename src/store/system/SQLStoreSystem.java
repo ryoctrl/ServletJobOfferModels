@@ -8,22 +8,20 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.Set;
 
 import model.ModelOption;
 import model.Models;
-import model.models.Company;
 import model.models.Storable;
-import store.AbstractPathStore;
 import store.AbstractStore;
 import utilities.Constants;
 import utilities.Logger;
 import utilities.SQLUtilities;
+import utilities.Constants.ModelType;
 
-public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
+public class SQLStoreSystem<T extends Storable> extends AbstractStoreSystem<T>{
 	private Connection conn = null;
 	
-	public SQLStore(AbstractStore<T> store) {
+	public SQLStoreSystem(AbstractStore<T> store) {
 		super(store);
 	}
 	
@@ -44,12 +42,11 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 			Statement stmt = conn.createStatement();
 			ResultSet companiesRs = stmt.executeQuery(SQLUtilities.selectAllQuery(store.getModelName()));
 			
-			Set<String> keys = Models.getModel(store.getModelName()).getModelKeys();
 			LinkedHashMap<String, ModelOption> columns = Models.getModel(store.getModelName()).getModelDefine();
 			while(companiesRs.next()) {
 				T obj = modelClass.newInstance();
 				columns.forEach((key, option) -> {
-					if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) {
+					if(option.getType() == ModelType.FOREIGN) {
 						//TODO: ここをいい感じにセットしたい
 						//現状10行ほど下のincludeExternalRecordIfNeeded(obj)で外部テーブルのオブジェクトをセットしてる
 						//これを動的にセットしたい. setterと、setすべきモデルのクラスobjectは取れてるけど、findAllByCompanyIdは取れてない。
@@ -64,7 +61,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 						System.exit(1);
 					}
 				});
-				store.includeExternalRecordIfNeeded(obj);
+				store.includeForeignRecordIfNeeded(obj);
 				records.add(obj);
 			}
 		}catch(Exception e) {
@@ -82,7 +79,7 @@ public class SQLStore<T extends Storable> extends AbstractStoreSystem<T>{
 			PreparedStatement ps = conn.prepareStatement(SQLUtilities.insertAllValuesQuery(model));
 			LinkedHashMap<String, ModelOption> modelDef = Models.getModel(modelName).getModelDefine();
 			modelDef.forEach((key, option) -> {
-				if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
+				if(option.getType() == ModelType.FOREIGN) return;
 				try {
 					ps.setObject(option.getColumnIndex() + 1, new PropertyDescriptor(key, obj.getClass()).getReadMethod().invoke(obj));
 				}catch(Exception e) {

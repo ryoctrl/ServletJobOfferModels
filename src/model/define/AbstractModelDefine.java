@@ -1,22 +1,29 @@
 package model.define;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 import model.IModelDefine;
 import model.ModelOption;
-import utilities.Constants;
+import utilities.Constants.ModelType;
 
 public abstract class AbstractModelDefine implements IModelDefine {
 	protected LinkedHashMap<String, ModelOption> columns = null;
 	protected String modelName;
+	protected ArrayList<String> dependencies;
 	protected AbstractModelDefine() {
 		columns = new LinkedHashMap<>();
 		defineModelName();
 		defineColumns();
+		dependencies = new ArrayList<String>();
+		registerDependencies(dependencies);
 	}
+	
+	public ArrayList<String> getDependencies() {
+		return dependencies;
+	}
+	
 	
 	public String getModelName() {
 		return modelName;
@@ -36,7 +43,7 @@ public abstract class AbstractModelDefine implements IModelDefine {
 	public int getNumberOfColumns() {
 		int count = 0;
 		for(ModelOption option : columns.values()) {
-			if(option.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) continue;
+			if(option.getType() == ModelType.FOREIGN) continue;
 			count++;
 		}
 		return count;
@@ -47,17 +54,9 @@ public abstract class AbstractModelDefine implements IModelDefine {
 		StringBuilder sb = new StringBuilder();
 		sb.append("CREATE TABLE " + modelName + " (");
 		columns.forEach((key, value) -> {
-			if(value.getType().equals(Constants.ModelTypes.EXTERNAL_COLUMN)) return;
+			if(value.getType() == ModelType.FOREIGN) return;
 			String columnDefineStr = key.equals("id") ? "`id`" : key;
-			String sqlType = "";
-			switch(value.getType()) {
-			case "String":
-				sqlType = "TEXT";
-				break;
-			case "int":
-				sqlType = "INT";
-				break;
-			}
+			String sqlType = value.getType().getSqlType();
 			columnDefineStr += " " + sqlType;
 			if(value.isId()) {
 				columnDefineStr += " NOT NULL AUTO_INCREMENT PRIMARY KEY,";
@@ -76,4 +75,5 @@ public abstract class AbstractModelDefine implements IModelDefine {
 	
 	protected abstract void defineColumns();
 	protected abstract void defineModelName();
+	protected abstract void registerDependencies(ArrayList<String> dependencies);
 }

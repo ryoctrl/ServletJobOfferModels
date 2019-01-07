@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 import model.models.Company;
 import model.models.Path;
-import store.AbstractCompanyStore;
-import store.AbstractPathStore;
+import model.modelstores.CompanyModelStore;
+import model.modelstores.PathModelStore;
+import model.modelstores.StoreProvider;
 
 /**
  * ServletからCompanyをあれこれするためのシングルトンなインタフェース
@@ -13,8 +14,8 @@ import store.AbstractPathStore;
  *
  */
 public class CompanyManager {
-	private AbstractCompanyStore cs;
-	private AbstractPathStore ps;
+	private CompanyModelStore companies;
+	private PathModelStore paths;
 	
 	private static CompanyManager instance = null;
 	public static CompanyManager getInstance() {
@@ -28,10 +29,9 @@ public class CompanyManager {
 		initialize();
 	}
 	
-	//WARNING: CompanyStore is dependence to PathStore. So should instantiate PathStore before instantiate CompanyStore
 	private void initialize() {
-		ps = AbstractPathStore.getInstance();
-		cs = AbstractCompanyStore.getInstance();
+		companies = (CompanyModelStore) StoreProvider.getModelStore("companies");
+		paths = (PathModelStore) StoreProvider.getModelStore("paths");
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class CompanyManager {
 	 */
 	public Company registerNewCompany(String name, String location, String type, String description) {
 		Company newCompany = new Company(name, location, type, description);
-		cs.insert(newCompany);
+		companies.insert(newCompany);
 		return newCompany;
 	}
 	
@@ -57,8 +57,8 @@ public class CompanyManager {
 	 */
 	public Path registerNewPath(String path, String name, int companyId) {
 		Path newPath = new Path(path,name, companyId);
-		ps.insert(newPath);
-		cs.findOneById(companyId).addPath(newPath);
+		paths.insert(newPath);
+		companies.findOneById(companyId).addPath(newPath);
 		return newPath;
 	}
 	
@@ -68,7 +68,7 @@ public class CompanyManager {
 	 * @return 該当する企業IDの企業.無ければnull
 	 */
 	public Company findOneByCompanyId(int companyId) {
-		return cs.findOneById(companyId);
+		return companies.findOneById(companyId);
 	}
 	
 	/**
@@ -78,7 +78,7 @@ public class CompanyManager {
 	 * @return 該当する企業のリスト.無ければ要素数0のArrayList
 	 */
 	public ArrayList<Company> findAllByLocation(String location) {
-		return cs.findAllByLocation(location);
+		return companies.findAllByLocation(location);
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public class CompanyManager {
 	 * @return 該当する企業のリスト.無ければ要素数0のArrayList
 	 */
 	public ArrayList<Company> findAllByType(String type) {
-		return cs.findAllByType(type);
+		return companies.findAllByType(type);
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class CompanyManager {
 	 * @return 全ての企業リスト.無ければ要素数0のArrayList
 	 */
 	public ArrayList<Company> getAllCompanies() {
-		return cs.getAll();
+		return companies.getAll();
 	}
 	
 	/**
@@ -106,7 +106,7 @@ public class CompanyManager {
 	 * @return 該当する企業のリスト.無ければ要素数0のArrayList
 	 */
 	public ArrayList<Company> findAllByLocations(String[] locations) {
-		return cs.findAllByLocations(locations);
+		return companies.findAllByLocations(locations);
 	}
 
 	/**
@@ -116,6 +116,6 @@ public class CompanyManager {
 	 * @return 該当する企業のリスト.無ければ要素数0のArrayList
 	 */
 	public ArrayList<Company> findAllByTypes(String[] types) {
-		return cs.findAllByTypes(types);
+		return companies.findAllByTypes(types);
 	}
 }

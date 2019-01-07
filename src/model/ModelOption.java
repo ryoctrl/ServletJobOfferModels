@@ -1,16 +1,16 @@
 package model;
 
 import model.models.Storable;
-import utilities.Constants;
+import utilities.Constants.ModelType;
 
 public class ModelOption {
-	private String type;
+	private ModelType type;
 	private boolean nullable;
 	private boolean isId;
 	private int columnIndex;
 	private Class<? extends Storable> externalModel;
 	
-	public ModelOption(String type, boolean nullable, int columnIndex) {
+	public ModelOption(ModelType type, boolean nullable, int columnIndex) {
 		this.type = type;
 		this.nullable = nullable;
 		this.isId = false;
@@ -19,24 +19,24 @@ public class ModelOption {
 	
 	public ModelOption(boolean isId) {
 		if(!isId) {
-			this.type = "String";
+			this.type = ModelType.STRING;
 			this.nullable = true;
 			this.isId = false;
 			this.columnIndex = 0;
 			return;
 		}
-		this.type = "int";
+		this.type = ModelType.INTEGER;
 		this.nullable = false;
 		this.isId = true;
 		this.columnIndex = 0;
 	}
 	
 	public ModelOption(Class<? extends Storable> externalModel) {
-		this.type = Constants.ModelTypes.EXTERNAL_COLUMN;
+		this.type = ModelType.FOREIGN;
 		this.externalModel = externalModel;
 	}
 	
-	public String getType() {
+	public ModelType getType() {
 		return this.type;
 	}
 	

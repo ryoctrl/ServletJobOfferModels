@@ -1,51 +1,36 @@
-package store;
+package model.modelstores;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import model.models.Company;
-import utilities.Constants;
 
-public abstract class AbstractCompanyStore extends AbstractStore<Company> {
-	private static AbstractCompanyStore instance = null;
-	public static AbstractCompanyStore getInstance() {
-		if(instance == null) {
-			String storageEnv = Constants.Environments.STORAGE_TYPE;
-			if(storageEnv == null || (!storageEnv.equals("json") && !storageEnv.equals("sql"))) storageEnv = "json";
-			
-			if(storageEnv.equals("json")) {
-				instance = new JsonCompanyStore();
-			} else {
-				instance = new SQLCompanyStore();
-			}
-		}
-		return instance;
-	}
-	
-	protected AbstractCompanyStore() {
-		super();
-		records = storeSystem.initialLoad(Company.class);
-	}
-	
+public class CompanyModelStore extends AbstractModelStore<Company>{
+
 	@Override
-	protected void initializeModelName() {
-		modelName = "companies";
+	public void includeForeignRecordIfNeeded(Company obj) {
+		obj.setPaths(((PathModelStore)StoreProvider.getModelStore("paths")).findAllByCompanyId(obj.getId()));
 	}
-	
+
 	@Override
-	public void includeExternalRecordIfNeeded(Company obj) {
-		obj.setPaths(AbstractPathStore.getInstance().findAllByCompanyId(obj.getId()));
+	public String getModelName() {
+		return "companies";
 	}
-	
+
+	@Override
+	public Class<Company> getModelClass() {
+		return Company.class;
+	}
+
 	public Company findOneById(int id) {
-		for(Company record : records) {
+		for(Company record : store.getAll()) {
 			if(record.getId() == id) return record;
 		}
 		return null;
 	}
 	
 	public Company findOneByName(String name) {
-		for(Company record : records) {
+		for(Company record : store.getAll()) {
 			if(record.getName().equals(name)) return record;
 		}
 		return null;
@@ -53,7 +38,7 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	
 	public ArrayList<Company> findAllByLocation(String location) {
 		ArrayList<Company> companies = new ArrayList<>();
-		for(Company record : records) {
+		for(Company record : store.getAll()) {
 			if(record.getLocation().equals(location)) companies.add(record);
 		}
 		return companies;
@@ -61,7 +46,7 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	
 	public ArrayList<Company> findAllByLocations(String[] locations) {
 		ArrayList<Company> companies = new ArrayList<>();
-		for(Company record : records) {
+		for(Company record : store.getAll()) {
 			if(Arrays.asList(locations).contains(record.getLocation())) companies.add(record);
 		}
 		return companies;
@@ -69,7 +54,7 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	
 	public ArrayList<Company> findAllByType(String type) {
 		ArrayList<Company> companies = new ArrayList<>();
-		for(Company record : records) {
+		for(Company record : store.getAll()) {
 			if(record.getType().equals(type)) companies.add(record);
 		}
 		return companies;
@@ -77,7 +62,7 @@ public abstract class AbstractCompanyStore extends AbstractStore<Company> {
 	
 	public ArrayList<Company> findAllByTypes(String[] types) {
 		ArrayList<Company> companies = new ArrayList<>();
-		for(Company record : records) {
+		for(Company record : store.getAll()) {
 			if(Arrays.asList(types).contains(record.getType())) companies.add(record);
 		}
 		return companies;
